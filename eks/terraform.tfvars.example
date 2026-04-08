@@ -1,0 +1,27 @@
+###############################################
+# terraform.tfvars.example
+# 이 파일을 참고하여 각 환경의 terraform.tfvars를 작성하세요.
+###############################################
+
+# AWS 리전
+region = "ap-northeast-2"
+
+# ※ EKS 관련 설정은 각 환경의 main.tf에서 직접 수정하세요:
+#
+# [DEV]     envs/dev/main.tf
+#   - cluster_name: "dev-eks"
+#   - VPC CIDR:     10.0.0.0/16
+#   - AZ:           ap-northeast-2a, ap-northeast-2c (2개)
+#   - 노드 타입:    t3.medium (min:1, max:3, desired:2)
+#
+# [STAGING] envs/staging/main.tf
+#   - cluster_name: "staging-eks"
+#   - VPC CIDR:     10.1.0.0/16
+#   - AZ:           ap-northeast-2a, ap-northeast-2c (2개)
+#   - 노드 타입:    t3.medium (min:1, max:3, desired:2)
+#
+# [PROD]    envs/prod/main.tf
+#   - cluster_name: "prod-eks"
+#   - VPC CIDR:     10.2.0.0/16
+#   - AZ:           ap-northeast-2a/b/c (3개, 고가용성)
+#   - 노드 타입:    t3.medium (min:1, max:3, desired:2)
