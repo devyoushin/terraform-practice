@@ -1,0 +1,27 @@
+###############################################
+# terraform.tfvars.example
+# 이 파일을 참고하여 각 환경의 terraform.tfvars를 작성하세요.
+# cp terraform.tfvars.example envs/dev/terraform.tfvars
+###############################################
+
+aws_region   = "ap-northeast-2"
+project_name = "my-project"   # ← 프로젝트 이름 입력
+
+# -----------------------------------------------
+# EC2 Role - S3 접근 (선택)
+# -----------------------------------------------
+# s3_bucket_arns = [
+#   "arn:aws:s3:::my-bucket",
+#   "arn:aws:s3:::my-bucket/*",
+# ]
+
+# -----------------------------------------------
+# CI/CD Role - GitHub Actions OIDC (선택)
+# -----------------------------------------------
+# github_org  = "my-github-org"
+# github_repo = "my-repo"
+
+# -----------------------------------------------
+# EKS IRSA - Service Account용 IAM Role (선택)
+# -----------------------------------------------
+# oidc_provider_arn = "arn:aws:iam::123456789012:oidc-provider/oidc.eks.ap-northeast-2.amazonaws.com/id/XXXXX"

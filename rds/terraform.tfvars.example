@@ -1,0 +1,79 @@
+### ============================================================
+### terraform.tfvars.example
+### 변수값 예시 파일 - 실제 사용 시 terraform.tfvars로 복사 후 수정
+### 사용 방법: cp terraform.tfvars.example envs/<환경>/terraform.tfvars
+### ============================================================
+
+### ---------------------------------------------------------------
+### AWS 기본 설정
+### ---------------------------------------------------------------
+
+# AWS 배포 리전 (서울 리전 기본값)
+aws_region = "ap-northeast-2"
+
+### ---------------------------------------------------------------
+### 프로젝트 정보
+### ---------------------------------------------------------------
+
+# 프로젝트 이름 (리소스 이름에 prefix로 사용됨)
+# 예: "my-project" -> my-project-dev-rds
+project_name = "my-project"
+
+# 리소스 소유자 또는 담당 팀 이름 (태그에 사용)
+owner = "dev-team"
+
+### ---------------------------------------------------------------
+### 네트워크 설정
+### ---------------------------------------------------------------
+
+# RDS를 배포할 VPC ID
+# AWS 콘솔 > VPC > VPC 목록에서 확인
+vpc_id = "vpc-XXXXXXXXXXXXXXXXX"
+
+# RDS 서브넷 그룹에 포함될 프라이빗 서브넷 ID 목록
+# - 최소 2개 이상, 서로 다른 가용 영역에 위치해야 함
+# - prod 환경은 3개 이상 권장 (Multi-AZ 고가용성)
+subnet_ids = [
+  "subnet-XXXXXXXXXXXXXXXXX", # ap-northeast-2a 프라이빗 서브넷
+  "subnet-XXXXXXXXXXXXXXXXX", # ap-northeast-2c 프라이빗 서브넷
+]
+
+# RDS 접근을 허용할 CIDR 블록 목록
+# - VPC 전체 허용: ["10.x.x.x/16"]
+# - 특정 서브넷만 허용: ["10.x.x.x/24", "10.x.x.x/24"]
+# - 최소 권한 원칙 적용 권장 (필요한 서브넷만 허용)
+allowed_cidr_blocks = ["10.10.0.0/16"]
+
+### ---------------------------------------------------------------
+### DB 기본 설정
+### ---------------------------------------------------------------
+
+# 생성할 데이터베이스 이름
+db_name = "mydb"
+
+# DB 마스터 사용자 이름
+db_username = "admin"
+
+# DB 마스터 비밀번호
+# [보안 경고] 이 값을 tfvars 파일에 직접 작성하지 마세요!
+# 권장 방법 1: AWS Secrets Manager에서 값을 가져와 환경변수로 주입
+#   export TF_VAR_db_password=$(aws secretsmanager get-secret-value --secret-id my-db-password --query SecretString --output text)
+# 권장 방법 2: Terraform apply 실행 시 -var 플래그 사용
+#   terraform apply -var="db_password=your-password"
+db_password = "CHANGE_ME_BEFORE_APPLY"
+
+### ---------------------------------------------------------------
+### 인스턴스 설정
+### ---------------------------------------------------------------
+
+# RDS 인스턴스 클래스 (환경별 권장값)
+# - dev:     db.t3.micro  (최저 비용)
+# - staging: db.t3.small  (중간 사양)
+# - prod:    db.t3.medium (프로덕션 최소 사양, 필요 시 상향)
+db_instance_class = "db.t3.micro"
+
+# 초기 할당 스토리지 크기 (GiB) - 환경별 권장값
+# - dev:     20  GiB
+# - staging: 50  GiB
+# - prod:    100 GiB
+allocated_storage = 20

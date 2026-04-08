@@ -1,0 +1,28 @@
+# Terraform 상태 파일 (민감 정보 포함 가능)
+*.tfstate
+*.tfstate.*
+
+# Terraform 캐시 및 플러그인 디렉토리
+.terraform/
+.terraform.lock.hcl
+
+# 변수 파일 (민감 값 포함 가능)
+terraform.tfvars
+*.auto.tfvars
+
+# Plan 파일
+tfplan
+*.tfplan
+
+# 충돌 로그
+crash.log
+crash.*.log
+
+# macOS 시스템 파일
+.DS_Store
+
+# 에디터 설정
+.idea/
+.vscode/
+*.swp
+*.swo

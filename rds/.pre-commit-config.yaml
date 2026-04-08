@@ -1,0 +1,42 @@
+### ============================================================
+### .pre-commit-config.yaml
+### Git 커밋 전 자동 검사 설정
+### 설치: pip install pre-commit && pre-commit install
+### 수동 실행: pre-commit run --all-files
+### ============================================================
+
+repos:
+  ### Terraform 전용 pre-commit 훅
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.92.0
+    hooks:
+      ### Terraform 코드 포맷팅 검사
+      - id: terraform_fmt
+
+      ### Terraform 설정 유효성 검사
+      - id: terraform_validate
+
+      ### TFLint: Terraform 코드 린팅 (사용하지 않는 변수, 오타 등 검사)
+      - id: terraform_tflint
+
+  ### 시크릿 탐지 (비밀번호, API 키 등 민감 정보 커밋 방지)
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.2
+    hooks:
+      - id: gitleaks
+
+  ### 공통 pre-commit 훅
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      ### 파일 끝 공백 제거
+      - id: trailing-whitespace
+
+      ### 파일 끝 개행 문자 확인
+      - id: end-of-file-fixer
+
+      ### 머지 충돌 마커 검사
+      - id: check-merge-conflict
+
+      ### YAML 문법 검사
+      - id: check-yaml

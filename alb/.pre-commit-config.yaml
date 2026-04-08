@@ -1,0 +1,73 @@
+###
+### pre-commit 훅 설정
+### Terraform 코드 품질 자동 검사 (커밋 전 실행)
+###
+### 설치 방법:
+###   pip install pre-commit
+###   pre-commit install
+###
+### 수동 실행:
+###   pre-commit run --all-files
+###
+
+repos:
+  ### ============================================================
+  ### 기본 파일 검사
+  ### ============================================================
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      # 파일 끝 빈 줄 확인
+      - id: end-of-file-fixer
+      # 후행 공백 제거
+      - id: trailing-whitespace
+      # 대용량 파일 커밋 방지 (500KB 초과)
+      - id: check-added-large-files
+        args: ["--maxkb=500"]
+      # JSON 문법 검사
+      - id: check-json
+      # YAML 문법 검사
+      - id: check-yaml
+        args: ["--unsafe"]
+      # 병합 충돌 마커 검사
+      - id: check-merge-conflict
+
+  ### ============================================================
+  ### Terraform 전용 훅
+  ### ============================================================
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.92.0
+    hooks:
+      # terraform fmt: 코드 포맷 자동 정리
+      - id: terraform_fmt
+
+      # terraform validate: 문법 및 구성 검증
+      - id: terraform_validate
+        args:
+          - --init-args=-upgrade
+
+      # terraform docs: README 변수/출력값 자동 문서화 (선택)
+      # - id: terraform_docs
+      #   args:
+      #     - --hook-config=--path-to-file=README.md
+      #     - --hook-config=--add-apache-2.0-copyright-header=false
+
+      # tflint: Terraform 코드 린팅
+      - id: terraform_tflint
+        args:
+          - --args=--config=__GIT_WORKING_DIR__/.tflint.hcl
+
+      # checkov: 보안/컴플라이언스 정적 분석 (선택)
+      # - id: terraform_checkov
+      #   args:
+      #     - --args=--quiet
+
+  ### ============================================================
+  ### 시크릿 탐지
+  ### ============================================================
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        args: ["--baseline", ".secrets.baseline"]
+        exclude: terraform.tfvars.example

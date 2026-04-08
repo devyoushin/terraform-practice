@@ -1,0 +1,89 @@
+### =============================================================================
+### .pre-commit-config.yaml
+### Git 커밋 전 자동 코드 품질 검사 설정
+###
+### [설치 방법]
+###   pip install pre-commit
+###   pre-commit install
+###
+### [수동 실행]
+###   pre-commit run --all-files
+### =============================================================================
+
+repos:
+  ### ---------------------------------------------------------------------------
+  ### Terraform 기본 검사 (antonbabenko/pre-commit-terraform)
+  ### ---------------------------------------------------------------------------
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.92.1
+    hooks:
+      # Terraform 파일 포맷 자동 정리 (terraform fmt)
+      - id: terraform_fmt
+        name: "[Terraform] 코드 포맷 검사"
+        args:
+          - --args=-recursive
+
+      # Terraform 설정 유효성 검사 (terraform validate)
+      - id: terraform_validate
+        name: "[Terraform] 설정 유효성 검사"
+        args:
+          - --init-flag=-upgrade
+
+      # TFLint를 이용한 정적 분석
+      - id: terraform_tflint
+        name: "[Terraform] TFLint 정적 분석"
+        args:
+          - --args=--only=terraform_deprecated_interpolation
+          - --args=--only=terraform_deprecated_index
+          - --args=--only=terraform_unused_declarations
+          - --args=--only=terraform_comment_syntax
+          - --args=--only=terraform_documented_outputs
+          - --args=--only=terraform_documented_variables
+          - --args=--only=terraform_typed_variables
+          - --args=--only=terraform_module_pinned_source
+          - --args=--only=terraform_naming_convention
+          - --args=--only=terraform_required_version
+          - --args=--only=terraform_required_providers
+          - --args=--only=terraform_unused_required_providers
+
+  ### ---------------------------------------------------------------------------
+  ### 보안 검사 (gitleaks - 민감 정보 유출 방지)
+  ### ---------------------------------------------------------------------------
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.4
+    hooks:
+      # AWS 자격증명, API 키 등 민감 정보가 커밋되는 것을 방지
+      - id: gitleaks
+        name: "[보안] 민감 정보 유출 검사 (gitleaks)"
+
+  ### ---------------------------------------------------------------------------
+  ### 일반 코드 품질 검사 (pre-commit-hooks)
+  ### ---------------------------------------------------------------------------
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      # 파일 끝 개행 문자 확인
+      - id: end-of-file-fixer
+        name: "[일반] 파일 끝 개행 문자 확인"
+
+      # 파일 끝 공백 제거
+      - id: trailing-whitespace
+        name: "[일반] 불필요한 공백 제거"
+
+      # JSON 파일 문법 검사
+      - id: check-json
+        name: "[일반] JSON 문법 검사"
+
+      # YAML 파일 문법 검사
+      - id: check-yaml
+        name: "[일반] YAML 문법 검사"
+
+      # 대용량 파일 커밋 방지 (기본 500KB)
+      - id: check-added-large-files
+        name: "[일반] 대용량 파일 커밋 방지"
+        args:
+          - --maxkb=500
+
+      # 병합 충돌 마커 확인
+      - id: check-merge-conflict
+        name: "[일반] 병합 충돌 마커 확인"

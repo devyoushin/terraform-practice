@@ -1,0 +1,47 @@
+###############################################
+# terraform.tfvars.example
+# 이 파일을 terraform.tfvars로 복사 후 실제 값을 입력하세요
+# cp terraform.tfvars.example envs/dev/terraform.tfvars
+###############################################
+
+aws_region   = "ap-northeast-2"
+project_name = "my-project"   # ← 프로젝트 이름 입력
+owner        = "dev-team"     # ← 담당자/팀 이름 입력
+
+# -----------------------------------------------
+# 네트워크
+# -----------------------------------------------
+vpc_id    = "vpc-XXXXXXXXXXXXXXXXX"    # ← VPC ID 입력
+subnet_id = "subnet-XXXXXXXXXXXXXXXXX" # ← 서브넷 ID 입력
+
+# -----------------------------------------------
+# EC2 설정
+# -----------------------------------------------
+ami_id        = "ami-056a29f2eddc40520"  # Amazon Linux 2023 서울 리전
+instance_type = "t3.micro"
+key_pair_name = "my-keypair"             # ← Key Pair 이름 입력
+
+# -----------------------------------------------
+# 보안 그룹
+# -----------------------------------------------
+allowed_ssh_cidr = ["0.0.0.0/0"]  # ← 내 IP로 변경 권장: ["X.X.X.X/32"]
+
+# -----------------------------------------------
+# 스토리지
+# -----------------------------------------------
+root_volume_size = 20
+
+# 추가 EBS 볼륨 (필요 시 주석 해제)
+# extra_ebs_volumes = [
+#   {
+#     device_name = "/dev/sdb"
+#     volume_type = "gp3"
+#     volume_size = 100
+#   }
+# ]
+
+# -----------------------------------------------
+# 옵션
+# -----------------------------------------------
+# iam_instance_profile = null   # IAM 프로파일 이름 (SSM, CloudWatch 사용 시)
+# create_eip           = false  # 고정 IP 필요 시 true

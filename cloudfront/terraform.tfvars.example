@@ -1,0 +1,35 @@
+###############################################
+# terraform.tfvars.example
+# 이 파일을 참고하여 각 환경의 terraform.tfvars를 작성하세요.
+# cp terraform.tfvars.example envs/dev/terraform.tfvars
+###############################################
+
+aws_region   = "ap-northeast-2"
+project_name = "my-project"   # ← 프로젝트 이름 입력
+owner        = "infra-team"   # ← 담당자/팀 이름 입력
+
+# -----------------------------------------------
+# 오리진 설정 (S3 또는 ALB 중 하나 필수)
+# -----------------------------------------------
+# S3 정적 파일 서빙 시
+# s3_origin_bucket_domain = "my-project-dev-assets.s3.ap-northeast-2.amazonaws.com"
+
+# ALB(API) 프록시 시
+# alb_origin_domain = "my-alb-1234567890.ap-northeast-2.elb.amazonaws.com"
+
+# -----------------------------------------------
+# 커스텀 도메인 (선택 - ACM 인증서 필요, us-east-1)
+# -----------------------------------------------
+# aliases             = ["cdn.example.com"]
+# acm_certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/xxxxxxxx"
+
+# -----------------------------------------------
+# 성능 및 보안
+# -----------------------------------------------
+# price_class = "PriceClass_200"   # PriceClass_All | PriceClass_200 | PriceClass_100
+
+# WAF 연결 (선택)
+# web_acl_id = "arn:aws:wafv2:us-east-1:123456789012:global/webacl/..."
+
+# 액세스 로그 (선택 - S3 버킷 필요)
+# access_log_bucket = "my-project-cloudfront-logs"

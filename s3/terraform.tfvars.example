@@ -1,0 +1,14 @@
+### =============================================================================
+### terraform.tfvars.example
+### 환경 변수값 예시 파일
+### 이 파일을 복사하여 terraform.tfvars로 사용하세요:
+###   cp terraform.tfvars.example envs/dev/terraform.tfvars
+### =============================================================================
+
+aws_region   = "ap-northeast-2"
+project_name = "my-project"
+owner        = "infra-team"
+
+# 버킷은 envs/*/main.tf에서 직접 정의됩니다.
+# 버킷 이름 패턴: {project_name}-{environment}-{bucket_suffix}
+# 예: my-project-prod-assets

@@ -1,0 +1,23 @@
+# Terraform 상태 파일 (민감 정보 포함 가능)
+*.tfstate
+*.tfstate.*
+
+# Terraform 초기화 디렉토리 (로컬 캐시, 바이너리)
+.terraform/
+
+# Terraform 잠금 파일 (공유 저장소에 포함 여부는 팀 정책에 따라 결정)
+.terraform.lock.hcl
+
+# 환경별 실제 변수값 파일 (민감 정보 포함 가능)
+terraform.tfvars
+*.auto.tfvars
+
+# Terraform plan 결과 파일
+tfplan
+*.tfplan
+
+# 충돌 로그
+crash.log
+
+# macOS 시스템 파일
+.DS_Store
