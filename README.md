@@ -25,11 +25,11 @@
 | [cloudwatch](./cloudwatch/) | CloudWatch Logs, 알람, 대시보드, SNS | ✅ 완료 |
 | [bastion](./bastion/) | Bastion 호스트, SSM Session Manager, SSH | ✅ 완료 |
 | [tgw](./tgw/) | Transit Gateway, 허브-앤-스포크, VPN, RAM 공유 | ✅ 완료 |
-| [route53](./route53/) | 호스팅 존, DNS 레코드, 헬스 체크, 페일오버 | ⚠️ dev 완료, staging/prod 미구현 |
-| [sqs-sns](./sqs-sns/) | SQS 큐, SNS 토픽, DLQ, 구독 | ⚠️ dev 완료, staging/prod 미구현 |
-| [backup](./backup/) | AWS Backup, 볼트, 계획, 보존 기간 관리 | ⚠️ dev 완료, staging/prod 미구현 |
-| [guardduty](./guardduty/) | GuardDuty, 위협 감지, SNS 알림, 심각도 필터 | ⚠️ dev 완료, staging/prod 미구현 |
-| [codepipeline](./codepipeline/) | CodePipeline, CodeBuild, ECS 배포 (Rolling/Blue-Green) | ⚠️ 모듈 부분 완료, envs 미구현 |
+| [route53](./route53/) | 호스팅 존, DNS 레코드, 헬스 체크, 페일오버 | ✅ 완료 |
+| [sqs-sns](./sqs-sns/) | SQS 큐, SNS 토픽, DLQ, 구독 | ✅ 완료 |
+| [backup](./backup/) | AWS Backup, 볼트, 계획, 보존 기간 관리 | ✅ 완료 |
+| [guardduty](./guardduty/) | GuardDuty, 위협 감지, SNS 알림, 심각도 필터 | ✅ 완료 |
+| [codepipeline](./codepipeline/) | CodePipeline, CodeBuild, ECS 배포 (Rolling/Blue-Green) | ✅ 완료 |
 
 ---
 
@@ -142,6 +142,9 @@ aws configure
 # Default output format: json
 ```
 
+> **권장**: 장기 자격증명(Access Key) 대신 **IAM Role + AWS SSO** 또는 **OIDC(GitHub Actions)**를 사용하세요.
+> 장기 키는 주기적으로 교체하고 절대 코드에 하드코딩하지 마세요.
+
 **설치 확인**
 ```bash
 aws --version
@@ -159,22 +162,101 @@ aws sts get-caller-identity
 
 ---
 
-### 4. IAM 권한 확인
+### 4. IAM 권한 설정
+
+#### Terraform 실행 사용자/역할에 필요한 권한
 
 Terraform을 실행하는 IAM 사용자 또는 역할에 아래 권한이 필요합니다.
+사용하는 모듈에 맞는 권한만 부여하세요 (최소 권한 원칙).
 
-| 서비스 | 필요 권한 |
-|--------|-----------|
-| VPC / EC2 | VPC, 서브넷, NAT Gateway, 보안 그룹 생성/삭제 |
-| EKS | 클러스터 생성/삭제, 노드 그룹 관리, 액세스 항목 관리 |
-| IAM | 역할, 정책, 인스턴스 프로파일 생성/삭제 |
-| RDS / ElastiCache / DynamoDB | DB 인스턴스 생성/삭제, 파라미터 그룹 관리 |
-| S3 | 버킷 생성/삭제, 정책 설정 |
-| KMS | 키 생성/삭제, 키 정책 관리 |
-| Route53 | 호스팅 존, 레코드, 헬스 체크 관리 |
-| SQS / SNS | 큐/토픽 생성/삭제, 정책 설정 |
+| 모듈 | 필요 IAM 권한 (Action) |
+|------|----------------------|
+| vpc | `ec2:*` (VPC, Subnet, NAT Gateway, IGW, Route Table) |
+| ec2 | `ec2:*`, `iam:PassRole` |
+| alb | `elasticloadbalancing:*`, `ec2:Describe*`, `acm:*` |
+| rds | `rds:*`, `ec2:Describe*` |
+| s3 | `s3:*` |
+| cloudfront | `cloudfront:*`, `acm:*` (us-east-1), `wafv2:*` |
+| waf | `wafv2:*` |
+| iam | `iam:*` |
+| kms | `kms:*` |
+| secrets-manager | `secretsmanager:*`, `kms:CreateGrant` |
+| eks | `eks:*`, `ec2:*`, `iam:*`, `autoscaling:*` |
+| ecr | `ecr:*` |
+| elasticache | `elasticache:*`, `ec2:Describe*` |
+| dynamodb | `dynamodb:*` |
+| cloudwatch | `cloudwatch:*`, `logs:*`, `sns:*` |
+| bastion | `ec2:*`, `ssm:*`, `iam:PassRole` |
+| tgw | `ec2:*` (TransitGateway 관련) |
+| route53 | `route53:*`, `cloudwatch:*` (us-east-1) |
+| sqs-sns | `sqs:*`, `sns:*`, `kms:CreateGrant` |
+| backup | `backup:*`, `iam:CreateRole`, `iam:AttachRolePolicy` |
+| guardduty | `guardduty:*`, `sns:*`, `events:*` |
+| codepipeline | `codepipeline:*`, `codebuild:*`, `codecommit:*`, `ecs:*`, `iam:PassRole` |
 
-> 테스트 환경에서는 `AdministratorAccess` 정책을 사용할 수 있습니다.
+#### IAM 정책 생성 예시 (최소 권한)
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "TerraformVPCAccess",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateVpc",
+        "ec2:DeleteVpc",
+        "ec2:DescribeVpcs",
+        "ec2:ModifyVpcAttribute",
+        "ec2:CreateSubnet",
+        "ec2:DeleteSubnet",
+        "ec2:DescribeSubnets"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+#### Terraform 상태 버킷 접근 권한
+
+원격 백엔드(S3 + DynamoDB) 사용 시 아래 권한이 추가로 필요합니다.
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "TerraformStateS3",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject",
+        "s3:ListBucket"
+      ],
+      "Resource": [
+        "arn:aws:s3:::your-terraform-state-bucket",
+        "arn:aws:s3:::your-terraform-state-bucket/*"
+      ]
+    },
+    {
+      "Sid": "TerraformStateLock",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:PutItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable"
+      ],
+      "Resource": "arn:aws:dynamodb:ap-northeast-2:*:table/terraform-state-lock"
+    }
+  ]
+}
+```
+
+> **테스트 환경**: `AdministratorAccess` 정책을 사용할 수 있습니다.
+> **운영 환경**: 반드시 최소 권한 정책을 직접 작성하여 사용하세요.
 
 ---
 
@@ -636,9 +718,9 @@ terraform init -migrate-state
 | cloudfront, waf, iam, kms, secrets-manager | ✅ | ✅ | ✅ | ✅ | ✅ |
 | eks, ecr, elasticache, dynamodb | ✅ | ✅ | ✅ | ✅ | ✅ |
 | cloudwatch, bastion, tgw | ✅ | ✅ | ✅ | ✅ | ✅ |
-| route53, sqs-sns | ✅ | ✅ | ❌ | ✅ | ✅ |
-| backup, guardduty | ✅ | ✅ | ❌ | ❌ | ❌ |
-| codepipeline | ⚠️ 부분 | ❌ | ❌ | ❌ | ❌ |
+| route53, sqs-sns | ✅ | ✅ | ✅ | ✅ | ✅ |
+| backup, guardduty | ✅ | ✅ | ✅ | ✅ | ✅ |
+| codepipeline | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 ---
 

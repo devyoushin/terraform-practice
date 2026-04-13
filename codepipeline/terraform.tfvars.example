@@ -1,0 +1,30 @@
+###############################################
+# terraform.tfvars.example
+# 이 파일을 복사 후 실제 값을 입력하세요
+# cp terraform.tfvars.example envs/dev/terraform.tfvars
+###############################################
+
+aws_region   = "ap-northeast-2"
+project_name = "my-project"   # ← 프로젝트 이름 입력
+owner        = "dev-team"     # ← 담당자/팀 이름 입력
+
+# -----------------------------------------------
+# 소스 설정
+# -----------------------------------------------
+source_provider = "CodeCommit"          # CodeCommit 또는 S3
+repository_name = "my-app-repo"         # ← CodeCommit 저장소 이름 입력
+branch_name     = "main"                # dev: develop / staging: staging / prod: main
+
+buildspec_path = "buildspec.yml"        # 저장소 루트 기준 buildspec 파일 경로
+
+# -----------------------------------------------
+# ECS 배포 설정 (deploy_provider = "ECS" 시)
+# -----------------------------------------------
+ecs_cluster_name = "my-ecs-cluster"     # ← ECS 클러스터 이름 입력
+ecs_service_name = "my-app-service"     # ← ECS 서비스 이름 입력
+
+# -----------------------------------------------
+# Blue/Green 배포 설정 (deploy_provider = "CodeDeployToECS" 시)
+# -----------------------------------------------
+# deploy_app_name   = "my-app-codedeploy"       # ← CodeDeploy 앱 이름 입력
+# deploy_group_name = "my-app-deployment-group" # ← CodeDeploy 배포 그룹 이름 입력

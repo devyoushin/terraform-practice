@@ -235,6 +235,6 @@ terraform apply   # Karpenter 포함 전체 적용
 | waf, iam, kms, secrets-manager | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | eks, ecr, elasticache, dynamodb | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | cloudwatch, bastion, tgw | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| route53, sqs-sns | ✅ | ✅ | ⚠️ 부분 | ✅ | ✅ | ✅ |
-| backup, guardduty | ✅ | ✅ | ❌ 미구현 | ❌ | ❌ | ❌ |
-| codepipeline | ⚠️ 부분 | ❌ | ❌ | ❌ | ❌ | ❌ |
+| route53, sqs-sns | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| backup, guardduty | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| codepipeline | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |

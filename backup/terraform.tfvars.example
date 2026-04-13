@@ -1,0 +1,36 @@
+###############################################
+# terraform.tfvars.example
+# 이 파일을 복사 후 실제 값을 입력하세요
+# cp terraform.tfvars.example envs/dev/terraform.tfvars
+###############################################
+
+aws_region   = "ap-northeast-2"
+project_name = "my-project"   # ← 프로젝트 이름 입력
+owner        = "dev-team"     # ← 담당자/팀 이름 입력
+
+# -----------------------------------------------
+# KMS 암호화 (prod 권장)
+# -----------------------------------------------
+# kms_key_arn = "arn:aws:kms:ap-northeast-2:123456789012:key/..."
+# null이면 AWS 관리형 키 사용 (dev/staging 기본값)
+
+# -----------------------------------------------
+# 백업 대상 리소스 (ARN 명시적 지정)
+# Backup=true 태그를 가진 리소스는 selection_tag로 자동 포함됨
+# -----------------------------------------------
+resource_arns = [
+  # "arn:aws:rds:ap-northeast-2:123456789012:db:my-rds-instance",
+  # "arn:aws:rds:ap-northeast-2:123456789012:cluster:my-aurora-cluster",
+  # "arn:aws:dynamodb:ap-northeast-2:123456789012:table/my-table",
+  # "arn:aws:elasticfilesystem:ap-northeast-2:123456789012:file-system/fs-xxxxxxxx",
+]
+
+# -----------------------------------------------
+# 태그 기반 리소스 선택 (staging/prod 권장)
+# 백업 대상 리소스에 아래 태그 추가 필요: Backup = "true"
+# -----------------------------------------------
+# selection_tag = {
+#   type  = "STRINGEQUALS"
+#   key   = "Backup"
+#   value = "true"
+# }
