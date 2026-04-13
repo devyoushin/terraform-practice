@@ -15,8 +15,8 @@ variable "environment" {
   description = "배포 환경 (dev / staging / prod)"
   type        = string
   validation {
-    condition     = contains(["dev", "staging", "prod"], var.environment)
-    error_message = "environment는 dev, staging, prod 중 하나여야 합니다."
+    condition     = contains(["dev", "prod"], var.environment)
+    error_message = "environment는 dev, prod 중 하나여야 합니다."
   }
 }
 

@@ -14,10 +14,10 @@ variable "project" {
 variable "environment" {
   description = "배포 환경. 리소스 이름과 default_tags에 반영됩니다."
   type        = string
-  # [필수] prod / staging / dev 중 하나만 허용 (아래 validation에서 검사)
+  # [필수] prod / dev 중 하나만 허용 (아래 validation에서 검사)
   validation {
-    condition     = contains(["prod", "staging", "dev"], var.environment)
-    error_message = "environment는 prod, staging, dev 중 하나여야 합니다."
+    condition     = contains(["prod", "dev"], var.environment)
+    error_message = "environment는 prod, dev 중 하나여야 합니다."
   }
 }
 

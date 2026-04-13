@@ -13,7 +13,7 @@ owner        = "dev-team"     # ← 담당자/팀 이름 입력
 # -----------------------------------------------
 source_provider = "CodeCommit"          # CodeCommit 또는 S3
 repository_name = "my-app-repo"         # ← CodeCommit 저장소 이름 입력
-branch_name     = "main"                # dev: develop / staging: staging / prod: main
+branch_name     = "main"                # dev: develop / prod: main
 
 buildspec_path = "buildspec.yml"        # 저장소 루트 기준 buildspec 파일 경로
 

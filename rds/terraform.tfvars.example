@@ -67,13 +67,11 @@ db_password = "CHANGE_ME_BEFORE_APPLY"
 ### ---------------------------------------------------------------
 
 # RDS 인스턴스 클래스 (환경별 권장값)
-# - dev:     db.t3.micro  (최저 비용)
-# - staging: db.t3.small  (중간 사양)
-# - prod:    db.t3.medium (프로덕션 최소 사양, 필요 시 상향)
+# - dev:  db.t3.micro  (최저 비용)
+# - prod: db.t3.medium (프로덕션 최소 사양, 필요 시 상향)
 db_instance_class = "db.t3.micro"
 
 # 초기 할당 스토리지 크기 (GiB) - 환경별 권장값
-# - dev:     20  GiB
-# - staging: 50  GiB
-# - prod:    100 GiB
+# - dev:  20  GiB
+# - prod: 100 GiB
 allocated_storage = 20

@@ -1,6 +1,6 @@
 # Terraform AWS 인프라 실습 저장소
 
-프로덕션 수준의 Terraform 모듈 모음으로, VPC부터 EKS, RDS, CloudFront까지 AWS 전체 스택을 다룹니다. 각 모듈은 dev / staging / prod 세 가지 환경에 걸쳐 실무 운영 패턴을 포함합니다.
+프로덕션 수준의 Terraform 모듈 모음으로, VPC부터 EKS, RDS, CloudFront까지 AWS 전체 스택을 다룹니다. 각 모듈은 **dev / prod 두 가지 환경**에 걸쳐 실무 운영 패턴을 포함합니다.
 
 ---
 
@@ -73,7 +73,7 @@
 
 ## 디렉토리 구조
 
-모든 모듈은 동일한 3-환경 구조를 따릅니다.
+모든 모듈은 동일한 2-환경 구조를 따릅니다.
 
 ```
 모듈명/
@@ -84,7 +84,6 @@
 │       └── outputs.tf       # 다른 모듈에서 참조하는 출력값
 ├── envs/
 │   ├── dev/                 # 저비용, 빠른 반복, 언제든 삭제 가능
-│   ├── staging/             # 프로덕션과 유사, 통합 테스트용
 │   └── prod/                # 완전한 가용성, 모든 보호 기능 활성화
 ├── Makefile                 # init / plan / apply / destroy 단축 명령
 ├── .pre-commit-config.yaml
@@ -336,7 +335,6 @@ terraform {
   production/prod/vpc/terraform.tfstate
   production/prod/eks/terraform.tfstate
   production/prod/rds/terraform.tfstate
-  staging/staging/vpc/terraform.tfstate
   dev/dev/vpc/terraform.tfstate
 ```
 
@@ -402,6 +400,82 @@ module "eks" {
   subnet_ids = data.terraform_remote_state.vpc.outputs.private_subnet_ids
 }
 ```
+
+---
+
+## CIDR 설계
+
+### 전체 IP 대역 할당 체계
+
+환경 간 IP가 겹치면 Transit Gateway 피어링 시 라우팅 충돌이 발생합니다.
+이를 방지하기 위해 환경별로 완전히 분리된 /16 블록을 사용합니다.
+
+| 환경 | VPC CIDR | 용도 |
+|------|----------|------|
+| prod | `10.0.0.0/16` | 운영 환경 |
+| dev | `10.10.0.0/16` | 개발 환경 |
+| TGW Hub | `10.100.0.0/16` | Transit Gateway 허브 VPC (멀티 계정 연결) |
+
+### 서브넷 넘버링 규칙
+
+각 VPC 내 서브넷은 **끝에서 두 번째 옥텟**으로 퍼블릭/프라이빗 구분합니다.
+
+```
+10.{env}.0.x/24   ~ 10.{env}.9.x/24   → 퍼블릭 서브넷  (0번대 = 공개)
+10.{env}.10.x/24  ~ 10.{env}.19.x/24  → 프라이빗 서브넷 (10번대 = 내부)
+```
+
+**예시 — prod (10.0.0.0/16, 3 AZ)**
+
+| 서브넷 | CIDR | 용도 |
+|--------|------|------|
+| public-2a | `10.0.0.0/24` | ALB, NAT Gateway |
+| public-2b | `10.0.1.0/24` | ALB, NAT Gateway |
+| public-2c | `10.0.2.0/24` | ALB, NAT Gateway |
+| private-2a | `10.0.10.0/24` | EC2, EKS 노드, ECS |
+| private-2b | `10.0.11.0/24` | EC2, EKS 노드, ECS |
+| private-2c | `10.0.12.0/24` | EC2, EKS 노드, ECS |
+
+**예시 — dev (10.10.0.0/16, 2 AZ)**
+
+| 서브넷 | CIDR | 용도 |
+|--------|------|------|
+| public-2a | `10.10.0.0/24` | ALB, NAT Gateway |
+| public-2c | `10.10.1.0/24` | ALB, NAT Gateway |
+| private-2a | `10.10.10.0/24` | EC2, EKS 노드, ECS |
+| private-2c | `10.10.11.0/24` | EC2, EKS 노드, ECS |
+
+### 서비스별 CIDR 설계 이유
+
+#### RDS / ElastiCache — `allowed_cidr_blocks`
+
+```
+prod: ["10.0.10.0/24", "10.0.11.0/24", "10.0.12.0/24"]  ← 프라이빗 서브넷만
+dev:  ["10.10.10.0/24", "10.10.11.0/24"]                 ← 프라이빗 서브넷만
+```
+
+**이유**: VPC 전체(`/16`)를 허용하면 퍼블릭 서브넷의 NAT Gateway나 Bastion에서도 DB 접근이 가능해집니다.
+프라이빗 서브넷 `/24` 단위로 제한하면 **앱 티어에서만 DB에 접근**할 수 있어 최소 권한 원칙을 실현합니다.
+
+#### Transit Gateway — BGP ASN
+
+```
+prod: amazon_side_asn = 64512
+dev:  amazon_side_asn = 64513
+```
+
+**이유**: 동일 AWS 계정 내에서 두 TGW를 생성할 때 ASN이 겹치면 BGP 피어링 설정이 불가합니다.
+환경별로 고유한 ASN을 부여해 VPN 또는 Direct Connect 연결 시 라우팅 충돌을 예방합니다.
+
+#### TGW 허브-앤-스포크 라우팅 구조
+
+```
+허브 VPC (10.100.0.0/16)
+  ├── prod Spoke (10.0.0.0/16)   ← production 계정 VPC
+  └── dev Spoke (10.10.0.0/16)   ← development 계정 VPC
+```
+
+세 블록(`10.0`, `10.10`, `10.100`)이 겹치지 않으므로 TGW 라우트 테이블에서 정확한 경로 전파가 가능합니다.
 
 ---
 
@@ -476,18 +550,15 @@ data "aws_ssm_parameter" "db_password" {
 ### 3. 환경 프로모션 워크플로우
 
 ```
-개발자 → dev → staging → prod
+개발자 → dev → prod
 
 1. envs/dev/ 에서 변경
 2. dev에서 terraform plan, 확인
-3. dev에서 terraform apply, 테스트
-4. 확인된 변경 내용을 envs/staging/으로 복사
-5. staging 변경에 대한 PR 리뷰
-6. staging에서 terraform apply, 통합 테스트 실행
-7. prod 프로모션을 위해 main으로 PR
-8. 동료 리뷰 (prod 필수)
-9. prod에서 terraform plan — 플랜 출력 신중히 검토
-10. 유지 관리 윈도우 동안 prod에서 terraform apply
+3. dev에서 terraform apply, 기능 검증
+4. prod 프로모션을 위해 main으로 PR
+5. 동료 리뷰 (prod 필수)
+6. prod에서 terraform plan — 플랜 출력 신중히 검토
+7. 유지 관리 윈도우 동안 prod에서 terraform apply
 ```
 
 **프로덕션 황금 규칙:** 항상 `terraform plan`을 실행하고 출력을 저장한 후 적용하세요.
@@ -556,7 +627,7 @@ name: Terraform
 
 on:
   pull_request:
-    paths: ['envs/staging/**', 'modules/**']
+    paths: ['envs/dev/**', 'modules/**']
   push:
     branches: [main]
     paths: ['envs/prod/**']
@@ -585,12 +656,12 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: envs/staging
+        working-directory: envs/dev
 
       - name: Terraform Plan
         id: plan
         run: terraform plan -no-color -out=tfplan
-        working-directory: envs/staging
+        working-directory: envs/dev
 
       - name: PR에 플랜 결과 게시
         uses: actions/github-script@v7
@@ -610,15 +681,16 @@ jobs:
 
 ## 환경별 비교
 
-| 항목 | dev | staging | prod |
-|------|-----|---------|------|
-| 비용 | 최소 | 중간 | 전체 |
-| 가용성 | 단일 AZ | 단일 AZ | Multi-AZ |
-| 백업 | 최소 | 짧은 보존 | 긴 보존 |
-| 암호화 | 선택적 | 권장 | 필수 |
-| 삭제 보호 | 비활성 | 비활성 | 활성 |
-| 모니터링 | 기본 | 표준 | 전체 + 알람 |
-| `force_destroy` | `true` | `false` | `false` |
+| 항목 | dev | prod |
+|------|-----|------|
+| 비용 | 최소 | 전체 |
+| 가용성 | 단일 AZ | Multi-AZ |
+| 백업 | 최소 | 긴 보존 |
+| 암호화 | 선택적 | 필수 |
+| 삭제 보호 | 비활성 | 활성 |
+| 모니터링 | 기본 | 전체 + 알람 |
+| `force_destroy` | `true` | `false` |
+| `prevent_destroy` | 없음 | 필수 |
 
 ---
 
@@ -628,7 +700,7 @@ jobs:
 
 ```bash
 make init ENV=dev        # 백엔드 설정과 함께 terraform init
-make plan ENV=staging    # terraform plan
+make plan ENV=dev        # terraform plan
 make apply ENV=prod      # terraform apply (확인 프롬프트 포함)
 make destroy ENV=dev     # terraform destroy (확인 프롬프트 포함)
 make fmt                 # terraform fmt -recursive
@@ -712,8 +784,8 @@ terraform init -migrate-state
 
 ## 모듈 구현 상태
 
-| 모듈 | modules | envs dev | envs staging/prod | Makefile | pre-commit |
-|------|---------|----------|-------------------|----------|------------|
+| 모듈 | modules | envs/dev | envs/prod | Makefile | pre-commit |
+|------|---------|----------|-----------|----------|------------|
 | vpc, ec2, alb, rds, s3 | ✅ | ✅ | ✅ | ✅ | ✅ |
 | cloudfront, waf, iam, kms, secrets-manager | ✅ | ✅ | ✅ | ✅ | ✅ |
 | eks, ecr, elasticache, dynamodb | ✅ | ✅ | ✅ | ✅ | ✅ |

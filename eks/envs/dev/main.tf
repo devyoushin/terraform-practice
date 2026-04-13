@@ -74,12 +74,12 @@ module "vpc" {
   source = "../../modules/vpc"
 
   name         = "dev-vpc"
-  cidr         = "10.0.0.0/16"           # ← VPC CIDR 범위 (필요 시 변경)
+  cidr         = "10.10.0.0/16"           # ← VPC CIDR 범위 (필요 시 변경)
   cluster_name = local.cluster_name
 
   azs             = ["ap-northeast-2a", "ap-northeast-2c"] # ← 사용할 AZ 목록
-  private_subnets = ["10.0.1.0/24", "10.0.2.0/24"]        # ← Private 서브넷 CIDR
-  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24"]    # ← Public 서브넷 CIDR
+  private_subnets = ["10.10.10.0/24", "10.10.11.0/24"]    # ← Private 서브넷 CIDR
+  public_subnets  = ["10.10.0.0/24", "10.10.1.0/24"]      # ← Public 서브넷 CIDR
 }
 
 # ============================================================
