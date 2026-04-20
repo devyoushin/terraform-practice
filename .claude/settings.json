@@ -1,0 +1,46 @@
+{
+  "model": "claude-sonnet-4-6",
+  "permissions": {
+    "allow": [
+      "Bash(git status)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git branch*)",
+      "Bash(terraform fmt*)",
+      "Bash(terraform validate*)",
+      "Bash(terraform plan*)",
+      "Bash(terraform output*)",
+      "Bash(terraform init*)",
+      "Bash(tflint*)",
+      "Bash(pre-commit run*)",
+      "Bash(make fmt*)",
+      "Bash(make validate*)",
+      "Bash(make plan*)",
+      "Bash(make init*)",
+      "Bash(make output*)"
+    ],
+    "deny": [
+      "Bash(terraform apply*)",
+      "Bash(terraform destroy*)",
+      "Bash(make apply*)",
+      "Bash(make destroy*)",
+      "Bash(rm -rf*)",
+      "Bash(git push --force*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "file=$(echo $CLAUDE_TOOL_INPUT | python3 -c \"import sys,json; d=json.load(sys.stdin); print(d.get('file_path',''))\" 2>/dev/null); [ -n \"$file\" ] && echo \"[terraform-practice] 저장: $(basename $file)\""
+          }
+        ]
+      }
+    ]
+  }
+}
