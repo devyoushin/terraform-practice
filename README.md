@@ -73,22 +73,101 @@
 
 ## 디렉토리 구조
 
-모든 모듈은 동일한 2-환경 구조를 따릅니다.
+두 가지 사용 패턴을 모두 지원합니다.
+
+### Terragrunt 패턴 (권장)
 
 ```
-모듈명/
-├── modules/
-│   └── 모듈명/
-│       ├── main.tf          # 리소스 정의
-│       ├── variables.tf     # 입력 변수
-│       └── outputs.tf       # 다른 모듈에서 참조하는 출력값
+terraform-practice/
+├── terragrunt.hcl           # 루트: remote_state + provider 자동 생성
+├── _envs/                   # 환경별 변수 참조 문서 (dev.hcl, prod.hcl)
+├── bootstrap/               # Remote State 인프라 (최초 1회 실행)
+│   ├── main.tf              # S3 버킷 + DynamoDB 테이블
+│   └── outputs.tf
+│
+├── dev/                     # DEV 환경 (VPC CIDR 10.10.0.0/16)
+│   ├── env.hcl              # environment = "dev"
+│   ├── vpc/terragrunt.hcl
+│   ├── kms/{rds,s3,eks}/terragrunt.hcl
+│   ├── iam/terragrunt.hcl
+│   ├── s3/{assets,logs}/terragrunt.hcl
+│   ├── secrets-manager/{rds,app-config}/terragrunt.hcl
+│   ├── rds/terragrunt.hcl   # → vpc, kms/rds 의존
+│   ├── eks/terragrunt.hcl   # → vpc, kms/eks 의존
+│   └── ... (27개 모듈)
+│
+└── prod/                    # PROD 환경 (VPC CIDR 10.0.0.0/16, 3 AZ)
+    ├── env.hcl              # environment = "prod"
+    ├── s3/backup/           # prod 전용 백업 버킷
+    └── ... (28개 모듈, prevent_destroy = true)
+```
+
+### 레거시 패턴 (기존 모듈 코드 보존)
+
+```
+<모듈명>/
+├── modules/<모듈명>/        # Terragrunt에서 source로 참조
+│   ├── main.tf
+│   ├── variables.tf
+│   └── outputs.tf
 ├── envs/
-│   ├── dev/                 # 저비용, 빠른 반복, 언제든 삭제 가능
-│   └── prod/                # 완전한 가용성, 모든 보호 기능 활성화
-├── Makefile                 # init / plan / apply / destroy 단축 명령
-├── .pre-commit-config.yaml
-├── terraform.tfvars.example
+│   ├── dev/                 # 직접 terraform apply 용
+│   └── prod/
+├── Makefile
 └── README.md
+```
+
+---
+
+## Terragrunt 빠른 시작
+
+### 1. 사전 설치
+
+```bash
+# Terragrunt 설치
+brew install terragrunt
+
+# 버전 확인
+terragrunt --version
+```
+
+### 2. Remote State 인프라 생성 (최초 1회)
+
+```bash
+cd bootstrap
+terraform init
+terraform apply
+# → S3 버킷(terraform-practice-tfstate) + DynamoDB 테이블 생성
+```
+
+### 3. 단일 모듈 실행
+
+```bash
+cd dev/vpc
+terragrunt init    # → S3 백엔드 자동 설정, provider.tf 자동 생성
+terragrunt plan
+terragrunt apply
+terragrunt output  # vpc_id, private_subnet_ids 확인
+```
+
+### 4. 환경 전체 실행 (의존성 자동 처리)
+
+```bash
+# DEV 전체 plan (VPC → KMS → RDS 순서 자동 계산)
+terragrunt run-all plan --terragrunt-working-dir dev/
+
+# DEV 전체 apply
+terragrunt run-all apply --terragrunt-working-dir dev/
+
+# 특정 모듈 + 모든 의존성 포함 apply
+terragrunt run-all apply --terragrunt-working-dir dev/rds/
+```
+
+### 5. 의존성 그래프 조회
+
+```bash
+# dev 환경 의존성 시각화
+terragrunt graph-dependencies --terragrunt-working-dir dev/ | dot -Tsvg > graph.svg
 ```
 
 ---

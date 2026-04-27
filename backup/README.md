@@ -231,25 +231,193 @@ module "backup" {
 
 ## 백업 복원
 
+### 복원 방법 선택 기준
+
+| 시나리오 | 권장 방법 | 이유 |
+|---|---|---|
+| AWS Backup vault 복구 포인트 복원 | **CLI / SDK** | Terraform에 `aws_backup_restore_job` 리소스 없음 |
+| RDS 스냅샷 → 새 인스턴스 (Terraform 관리) | **Terraform** | `snapshot_identifier`로 복원 후 계속 관리 |
+| EBS 스냅샷 → 새 볼륨 (Terraform 관리) | **Terraform** | `snapshot_id`로 복원 후 계속 관리 |
+| DynamoDB PITR (Terraform 관리) | **Terraform** | `restore_to_point_in_time` 블록 사용 |
+| 긴급 일회성 복구 | **CLI** | 가장 빠른 대응 가능 |
+| 자동화 복구 파이프라인 | **SDK (boto3)** | 조건 분기 및 상태 관리 용이 |
+
+---
+
 ### AWS 콘솔에서 복원
 
 1. AWS 콘솔 → AWS Backup → 복구 포인트
 2. 복원할 복구 포인트 선택
 3. "복원" 클릭 → 복원 설정 구성 → 복원 시작
 
-### AWS CLI로 복원
+---
+
+### AWS CLI로 복원 (AWS Backup 복구 포인트)
 
 ```bash
 # 복구 포인트 목록 확인
 aws backup list-recovery-points-by-backup-vault \
-  --backup-vault-name my-project-prod-Default
+  --backup-vault-name my-project-prod-Default \
+  --region ap-northeast-2
 
 # RDS 인스턴스 복원
 aws backup start-restore-job \
   --recovery-point-arn "arn:aws:backup:ap-northeast-2:123456789012:recovery-point:..." \
-  --metadata '{"DBInstanceIdentifier":"restored-db","DBInstanceClass":"db.t3.medium","Engine":"mysql","MultiAZ":"false"}' \
+  --metadata '{
+    "DBInstanceIdentifier": "my-project-prod-rds-restored",
+    "DBInstanceClass":      "db.t3.medium",
+    "Engine":               "mysql",
+    "MultiAZ":              "false"
+  }' \
   --iam-role-arn "arn:aws:iam::123456789012:role/my-project-prod-backup-role" \
-  --resource-type RDS
+  --resource-type RDS \
+  --region ap-northeast-2
+
+# EBS 볼륨 복원
+aws backup start-restore-job \
+  --recovery-point-arn "arn:aws:backup:ap-northeast-2:123456789012:recovery-point:..." \
+  --metadata '{
+    "volumeId":           "vol-xxxxxxxxxxxxxxxxx",
+    "availabilityZone":   "ap-northeast-2a",
+    "encrypted":          "true"
+  }' \
+  --iam-role-arn "arn:aws:iam::123456789012:role/my-project-prod-backup-role" \
+  --resource-type "EBS" \
+  --region ap-northeast-2
+
+# 복원 작업 상태 확인
+aws backup describe-restore-job \
+  --restore-job-id <JOB_ID> \
+  --region ap-northeast-2
+```
+
+---
+
+### Terraform으로 복원 (스냅샷 기반)
+
+> Terraform으로 복원하면 복원된 리소스가 Terraform state에 포함되어 이후 변경도 코드로 관리할 수 있습니다.
+
+#### RDS 스냅샷 복원
+
+```hcl
+# envs/prod/main.tf — 스냅샷에서 새 RDS 인스턴스 생성
+resource "aws_db_instance" "restored" {
+  identifier     = "my-project-prod-rds-restored"
+  instance_class = "db.t3.medium"
+
+  # 복원할 스냅샷 ARN 또는 ID
+  snapshot_identifier = "arn:aws:rds:ap-northeast-2:123456789012:snapshot:rds:my-db-2026-04-15-03-00"
+
+  # 스냅샷에서 복원 시 engine/username은 자동 상속
+  # password는 apply 후 반드시 수동 변경 또는 Secrets Manager 연동 필요
+
+  db_subnet_group_name   = aws_db_subnet_group.main.name
+  vpc_security_group_ids = [aws_security_group.rds.id]
+  skip_final_snapshot    = false
+  deletion_protection    = true
+
+  tags = merge(local.common_tags, {
+    Name        = "my-project-prod-rds-restored"
+    RestoredFrom = "snapshot"
+  })
+}
+```
+
+#### DynamoDB PITR 복원
+
+```hcl
+# 특정 시점으로 테이블 복원
+resource "aws_dynamodb_table" "restored" {
+  name         = "my-table-restored"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "id"
+
+  restore_to_point_in_time {
+    source_table_name          = "my-table-prod"
+    restore_date_time          = "2026-04-14T03:00:00Z"  # UTC 기준
+    use_latest_restorable_time = false                    # true로 설정 시 restore_date_time 무시
+  }
+
+  attribute {
+    name = "id"
+    type = "S"
+  }
+
+  tags = local.common_tags
+}
+```
+
+#### EBS 스냅샷 복원
+
+```hcl
+# 스냅샷에서 새 EBS 볼륨 생성
+resource "aws_ebs_volume" "restored" {
+  availability_zone = "ap-northeast-2a"
+  snapshot_id       = "snap-xxxxxxxxxxxxxxxxx"
+  type              = "gp3"
+  encrypted         = true
+  kms_key_id        = var.kms_key_arn
+
+  tags = merge(local.common_tags, {
+    Name = "my-project-prod-ebs-restored"
+  })
+}
+```
+
+---
+
+### 복원 후 Terraform State 관리
+
+CLI로 복원한 리소스를 이후 Terraform으로 관리하려면 `import`가 필요합니다.
+
+```bash
+# 1. Terraform 코드에 리소스 블록 추가 후 import 실행
+
+# RDS import
+terraform import aws_db_instance.restored my-project-prod-rds-restored
+
+# EBS 볼륨 import
+terraform import aws_ebs_volume.restored vol-xxxxxxxxxxxxxxxxx
+
+# DynamoDB import
+terraform import aws_dynamodb_table.restored my-table-restored
+
+# 2. import 후 plan으로 drift 확인 (변경사항 없어야 정상)
+terraform plan
+```
+
+> **주의:** `terraform import` 후 반드시 `terraform plan`을 실행하여 실제 리소스 설정과 코드가 일치하는지 확인하세요. diff가 발생하면 코드를 실제 값에 맞게 수정합니다.
+
+---
+
+### prod 긴급 복구 절차 (RTO 최소화)
+
+```bash
+# Step 1. 최신 복구 포인트 확인
+aws backup list-recovery-points-by-backup-vault \
+  --backup-vault-name my-project-prod-Default \
+  --query 'RecoveryPoints | sort_by(@, &CreationDate) | [-1]' \
+  --output json
+
+# Step 2. 복원 작업 시작 (CLI — 가장 빠름)
+RESTORE_JOB=$(aws backup start-restore-job \
+  --recovery-point-arn "<RECOVERY_POINT_ARN>" \
+  --metadata '{"DBInstanceIdentifier":"my-project-prod-rds-emergency"}' \
+  --iam-role-arn "<BACKUP_ROLE_ARN>" \
+  --resource-type RDS \
+  --query 'RestoreJobId' --output text)
+
+# Step 3. 복원 완료까지 상태 폴링
+watch -n 30 "aws backup describe-restore-job --restore-job-id $RESTORE_JOB \
+  --query '[Status, PercentDone]' --output text"
+
+# Step 4. 복원 완료 후 엔드포인트 확인
+aws rds describe-db-instances \
+  --db-instance-identifier my-project-prod-rds-emergency \
+  --query 'DBInstances[0].Endpoint'
+
+# Step 5. (선택) 안정화 후 Terraform으로 import하여 코드 관리 전환
+terraform import aws_db_instance.main my-project-prod-rds-emergency
 ```
 
 ---
