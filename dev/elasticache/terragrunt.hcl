@@ -30,7 +30,7 @@ dependency "vpc" {
 }
 
 terraform {
-  source = "../../elasticache/modules/elasticache"
+  source = "../../legacy/elasticache/modules/elasticache"
 }
 
 inputs = {

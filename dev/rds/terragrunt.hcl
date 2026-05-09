@@ -40,7 +40,7 @@ dependency "kms_rds" {
 }
 
 terraform {
-  source = "../../rds/modules/rds"
+  source = "../../legacy/rds/modules/rds"
 }
 
 inputs = {

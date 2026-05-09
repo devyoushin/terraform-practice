@@ -14,7 +14,7 @@ include "root" {
 }
 
 terraform {
-  source = "../../../kms/modules/kms"
+  source = "../../../legacy/kms/modules/kms"
 }
 
 inputs = {

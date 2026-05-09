@@ -31,7 +31,7 @@ dependency "vpc" {
 }
 
 terraform {
-  source = "../../eks/modules/eks"
+  source = "../../legacy/eks/modules/eks"
 }
 
 inputs = {

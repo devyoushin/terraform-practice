@@ -1,0 +1,32 @@
+###############################################
+# terraform.tfvars.example
+# 이 파일을 참고하여 각 환경의 terraform.tfvars를 작성하세요.
+# cp terraform.tfvars.example envs/dev/terraform.tfvars
+###############################################
+
+aws_region   = "ap-northeast-2"
+project_name = "my-project"   # ← 프로젝트 이름 입력
+owner        = "infra-team"   # ← 담당자/팀 이름 입력
+
+# -----------------------------------------------
+# 키 설정
+# -----------------------------------------------
+key_suffix = "rds"   # ← 용도 입력 (예: rds, s3, eks, app, general)
+
+# 자동 키 교체 (보안 규정 준수를 위해 true 권장)
+enable_key_rotation = true
+
+# 키 삭제 대기 기간: dev=7, prod=30 권장
+deletion_window_in_days = 30
+
+# -----------------------------------------------
+# 선택 옵션
+# -----------------------------------------------
+# key_usage  = "ENCRYPT_DECRYPT"   # ENCRYPT_DECRYPT | SIGN_VERIFY
+# key_spec   = "SYMMETRIC_DEFAULT" # 대칭키(기본) | RSA_2048 | RSA_4096
+
+# 멀티 리전 키 (DR 시나리오에서 사용)
+# multi_region = false
+
+# 커스텀 키 정책 (기본: 계정 루트 전체 권한)
+# key_policy_json = ""

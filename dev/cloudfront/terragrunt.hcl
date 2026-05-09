@@ -30,7 +30,7 @@ dependency "s3_assets" {
 }
 
 terraform {
-  source = "../../cloudfront/modules/cloudfront"
+  source = "../../legacy/cloudfront/modules/cloudfront"
 }
 
 inputs = {

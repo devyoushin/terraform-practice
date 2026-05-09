@@ -1,0 +1,44 @@
+###############################################
+# terraform.tfvars.example
+# 이 파일을 참고하여 각 환경의 terraform.tfvars를 작성하세요.
+# cp terraform.tfvars.example envs/dev/terraform.tfvars
+###############################################
+
+aws_region   = "ap-northeast-2"
+project_name = "my-project"   # ← 프로젝트 이름 입력
+owner        = "infra-team"   # ← 담당자/팀 이름 입력
+
+# -----------------------------------------------
+# 네트워크 (terraform-vpc 출력값 참조)
+# -----------------------------------------------
+vpc_id     = "vpc-xxxxxxxxxxxxxxxxx"   # ← VPC ID
+subnet_ids = ["subnet-xxxxxxxx", "subnet-yyyyyyyy"]   # ← 프라이빗 서브넷 ID 목록
+allowed_cidr_blocks = ["10.10.0.0/16"]   # ← Redis 접근 허용 CIDR (VPC CIDR 권장)
+
+# -----------------------------------------------
+# Redis 설정
+# -----------------------------------------------
+redis_version      = "7.1"
+node_type          = "cache.t3.micro"   # prod: cache.r7g.large 권장
+num_cache_clusters = 1   # dev: 1 (Primary만), prod: 2 (Primary + Replica)
+
+# -----------------------------------------------
+# prod 권장 옵션
+# -----------------------------------------------
+# multi_az_enabled         = false   # prod: true 권장
+# snapshot_retention_limit = 0       # dev: 0, prod: 7
+# snapshot_window          = "03:00-04:00"
+# maintenance_window       = "mon:04:00-mon:05:00"
+# enable_logs              = false   # prod: true 권장
+
+# -----------------------------------------------
+# 인증 (선택 - TLS 활성화 시 사용 가능)
+# -----------------------------------------------
+# auth_token = ""   # 빈 문자열이면 인증 없음
+
+# -----------------------------------------------
+# 메모리 정책
+# -----------------------------------------------
+# maxmemory_policy = "allkeys-lru"   # allkeys-lru | volatile-lru | noeviction
+
+# apply_immediately = true   # dev: true, prod: false (유지보수 시간에 적용)

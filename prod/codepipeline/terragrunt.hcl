@@ -47,7 +47,7 @@ dependency "s3_logs" {
 }
 
 terraform {
-  source = "../../codepipeline/modules/codepipeline"
+  source = "../../legacy/codepipeline/modules/codepipeline"
 }
 
 inputs = {

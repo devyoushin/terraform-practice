@@ -32,7 +32,7 @@ dependency "kms_s3" {
 }
 
 terraform {
-  source = "../../../dynamodb/modules/dynamodb"
+  source = "../../../legacy/dynamodb/modules/dynamodb"
 }
 
 prevent_destroy = true  # Terragrunt: run-all destroy 실행 차단

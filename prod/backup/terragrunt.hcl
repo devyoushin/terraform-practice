@@ -34,7 +34,7 @@ dependency "kms_s3" {
 }
 
 terraform {
-  source = "../../backup/modules/backup"
+  source = "../../legacy/backup/modules/backup"
 }
 
 prevent_destroy = true  # Terragrunt: run-all destroy 실행 차단

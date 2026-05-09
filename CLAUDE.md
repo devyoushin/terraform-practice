@@ -9,7 +9,7 @@
 AWS 인프라를 Terraform으로 관리하는 실무 수준의 모듈 모음입니다.
 
 두 가지 패턴을 모두 포함합니다:
-- **레거시 패턴**: `<module>/modules/` + `<module>/envs/` 분리 (각 모듈 디렉토리 내부)
+- **레거시 패턴**: `legacy/<module>/modules/` + `legacy/<module>/envs/` 분리
 - **Terragrunt 패턴**: `dev/` + `prod/` 환경 디렉토리 + 루트 `terragrunt.hcl` (권장)
 
 ---
@@ -54,24 +54,25 @@ terraform-practice/
 ├── prod/                      # [Terragrunt] PROD 환경 모듈 호출 (dev + s3/backup 추가)
 │   └── ... (dev와 동일 구조)
 │
+├── legacy/                    # [레거시] 각 AWS 서비스 모듈 (Terragrunt에서 source로 참조)
+│   └── <module>/
+│       ├── modules/<module>/  # 재사용 가능한 리소스 정의
+│       │   ├── main.tf
+│       │   ├── variables.tf
+│       │   └── outputs.tf
+│       ├── envs/              # 레거시: 직접 terraform apply 용
+│       │   ├── dev/
+│       │   └── prod/
+│       ├── Makefile
+│       ├── .pre-commit-config.yaml
+│       └── README.md
+│
 ├── .claude/
 │   ├── settings.json          # 권한 설정 (apply/destroy 차단) + PostToolUse 훅
 │   └── commands/              # 커스텀 슬래시 명령어
 ├── agents/                    # 전문 에이전트 정의
 ├── templates/                 # 문서 템플릿
-├── rules/                     # Claude 작성 규칙
-│
-└── <module>/                  # [레거시] 각 AWS 서비스 모듈
-    ├── modules/<module>/      # 재사용 가능한 리소스 정의 (Terragrunt에서도 참조)
-    │   ├── main.tf
-    │   ├── variables.tf
-    │   └── outputs.tf
-    ├── envs/                  # 레거시: 직접 terraform apply 용
-    │   ├── dev/
-    │   └── prod/
-    ├── Makefile
-    ├── .pre-commit-config.yaml
-    └── README.md
+└── rules/                     # Claude 작성 규칙
 ```
 
 ---

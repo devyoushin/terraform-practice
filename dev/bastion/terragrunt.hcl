@@ -31,7 +31,7 @@ dependency "vpc" {
 }
 
 terraform {
-  source = "../../bastion/modules/bastion"
+  source = "../../legacy/bastion/modules/bastion"
 }
 
 inputs = {

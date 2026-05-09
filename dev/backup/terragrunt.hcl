@@ -17,7 +17,7 @@ include "root" {
 }
 
 terraform {
-  source = "../../backup/modules/backup"
+  source = "../../legacy/backup/modules/backup"
 }
 
 inputs = {

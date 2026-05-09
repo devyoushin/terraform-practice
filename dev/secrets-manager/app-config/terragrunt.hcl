@@ -16,7 +16,7 @@ include "root" {
 }
 
 terraform {
-  source = "../../../secrets-manager/modules/secrets-manager"
+  source = "../../../legacy/secrets-manager/modules/secrets-manager"
 }
 
 inputs = {

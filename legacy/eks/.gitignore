@@ -1,0 +1,14 @@
+ # Terraform 상태 파일 (AWS 리소스 정보 포함 - 절대 커밋 금지)
+ *.tfstate
+ *.tfstate.backup
+ .terraform/
+ .terraform.lock.hcl
+
+ # 민감 정보 파일
+ *.tfvars
+ *.tfvars.json
+ override.tf
+ override.tf.json
+
+ # macOS
+ .DS_Store

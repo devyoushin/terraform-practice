@@ -1,0 +1,35 @@
+### terraform.tfvars 예시 파일
+### 이 파일을 복사하여 각 환경에 맞게 수정하세요
+###
+### cp terraform.tfvars.example envs/dev/terraform.tfvars
+### cp terraform.tfvars.example envs/staging/terraform.tfvars
+### cp terraform.tfvars.example envs/prod/terraform.tfvars
+
+### ============================================================
+### 공통 설정
+### ============================================================
+
+aws_region   = "ap-northeast-2"
+project_name = "my-project"
+owner        = "dev-team"
+
+### ============================================================
+### 네트워크 설정 (실제 VPC/서브넷 ID로 변경 필수)
+### ============================================================
+
+vpc_id     = "vpc-XXXXXXXXXXXXXXXXX"
+subnet_ids = ["subnet-XXXXXXXXXXXXXXXXX", "subnet-XXXXXXXXXXXXXXXXX"]
+
+### ============================================================
+### 타겟 그룹 설정
+### ============================================================
+
+target_type       = "instance"   # instance / ip / lambda
+health_check_path = "/health"
+
+### ============================================================
+### prod 환경 전용 (dev/staging에서는 불필요)
+### ============================================================
+
+# acm_certificate_arn = "arn:aws:acm:ap-northeast-2:123456789012:certificate/XXXXXXXX"
+# access_logs_bucket  = "my-alb-logs-bucket"

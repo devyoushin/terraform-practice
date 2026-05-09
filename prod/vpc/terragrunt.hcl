@@ -21,7 +21,7 @@ include "root" {
 }
 
 terraform {
-  source = "../../vpc/modules/vpc"
+  source = "../../legacy/vpc/modules/vpc"
 }
 
 inputs = {

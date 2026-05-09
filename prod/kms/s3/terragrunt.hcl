@@ -22,7 +22,7 @@ include "root" {
 }
 
 terraform {
-  source = "../../../kms/modules/kms"
+  source = "../../../legacy/kms/modules/kms"
 }
 
 prevent_destroy = true  # Terragrunt: run-all destroy 실행 차단

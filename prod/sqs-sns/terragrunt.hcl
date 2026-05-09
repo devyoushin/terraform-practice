@@ -44,7 +44,7 @@ dependency "cloudwatch" {
 }
 
 terraform {
-  source = "../../sqs-sns/modules/sqs-sns"
+  source = "../../legacy/sqs-sns/modules/sqs-sns"
 }
 
 inputs = {

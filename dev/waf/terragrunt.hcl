@@ -18,7 +18,7 @@ include "root" {
 }
 
 terraform {
-  source = "../../waf/modules/waf"
+  source = "../../legacy/waf/modules/waf"
 }
 
 inputs = {

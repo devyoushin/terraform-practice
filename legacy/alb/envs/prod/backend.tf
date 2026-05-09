@@ -1,0 +1,17 @@
+###
+### prod 환경 - Terraform 백엔드 설정
+### prod 환경은 반드시 S3 원격 백엔드를 사용하세요 (로컬 상태 파일 금지)
+### 아래 주석을 해제하고 버킷 이름, 리전을 실제 값으로 변경하세요
+###
+
+# terraform {
+#   backend "s3" {
+#     bucket         = "my-project-terraform-state"
+#     key            = "prod/alb/terraform.tfstate"
+#     region         = "ap-northeast-2"
+#     encrypt        = true
+#
+#     # DynamoDB 상태 잠금 (prod 환경 필수 - 동시 실행으로 인한 상태 충돌 방지)
+#     dynamodb_table = "my-project-terraform-lock"
+#   }
+# }

@@ -19,7 +19,7 @@ include "root" {
 }
 
 terraform {
-  source = "../../../s3/modules/s3"
+  source = "../../../legacy/s3/modules/s3"
 }
 
 prevent_destroy = true  # Terragrunt: run-all destroy 실행 차단

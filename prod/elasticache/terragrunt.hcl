@@ -44,7 +44,7 @@ dependency "kms_s3" {
 }
 
 terraform {
-  source = "../../elasticache/modules/elasticache"
+  source = "../../legacy/elasticache/modules/elasticache"
 }
 
 prevent_destroy = true  # Terragrunt: run-all destroy 실행 차단

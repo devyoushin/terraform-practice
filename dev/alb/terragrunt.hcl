@@ -28,7 +28,7 @@ dependency "vpc" {
 }
 
 terraform {
-  source = "../../alb/modules/alb"
+  source = "../../legacy/alb/modules/alb"
 }
 
 inputs = {

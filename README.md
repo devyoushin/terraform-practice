@@ -8,28 +8,28 @@
 
 | 모듈 | 설명 | 상태 |
 |------|------|------|
-| [vpc](./vpc/) | VPC, 서브넷, NAT Gateway, VPC Endpoints, Flow Logs | ✅ 완료 |
-| [ec2](./ec2/) | EC2 인스턴스, EBS, Security Groups, IAM 프로파일 | ✅ 완료 |
-| [alb](./alb/) | Application Load Balancer, HTTPS/ACM, 액세스 로그 | ✅ 완료 |
-| [rds](./rds/) | RDS MySQL 8.0, Multi-AZ, 백업, Performance Insights | ✅ 완료 |
-| [s3](./s3/) | S3 버킷, 버전 관리, 수명 주기, 암호화 | ✅ 완료 |
-| [cloudfront](./cloudfront/) | CloudFront CDN, OAC, WAF 연동, 커스텀 도메인 | ✅ 완료 |
-| [waf](./waf/) | WAF v2, IP 차단, 레이트 리밋, 관리형 규칙 | ✅ 완료 |
-| [iam](./iam/) | IAM 역할: EC2, GitHub OIDC (CI/CD), EKS IRSA | ✅ 완료 |
-| [kms](./kms/) | KMS 키, 자동 교체, 멀티 리전 | ✅ 완료 |
-| [secrets-manager](./secrets-manager/) | Secrets Manager, KMS 암호화, 자동 교체 | ✅ 완료 |
-| [eks](./eks/) | EKS 클러스터, 관리형 노드 그룹, Karpenter, IRSA | ✅ 완료 |
-| [ecr](./ecr/) | ECR, 이미지 스캔, 수명 주기 정책 | ✅ 완료 |
-| [elasticache](./elasticache/) | ElastiCache Redis, Multi-AZ, 암호화, 스냅샷 | ✅ 완료 |
-| [dynamodb](./dynamodb/) | DynamoDB, OnDemand/Provisioned, GSI, PITR | ✅ 완료 |
-| [cloudwatch](./cloudwatch/) | CloudWatch Logs, 알람, 대시보드, SNS | ✅ 완료 |
-| [bastion](./bastion/) | Bastion 호스트, SSM Session Manager, SSH | ✅ 완료 |
-| [tgw](./tgw/) | Transit Gateway, 허브-앤-스포크, VPN, RAM 공유 | ✅ 완료 |
-| [route53](./route53/) | 호스팅 존, DNS 레코드, 헬스 체크, 페일오버 | ✅ 완료 |
-| [sqs-sns](./sqs-sns/) | SQS 큐, SNS 토픽, DLQ, 구독 | ✅ 완료 |
-| [backup](./backup/) | AWS Backup, 볼트, 계획, 보존 기간 관리 | ✅ 완료 |
-| [guardduty](./guardduty/) | GuardDuty, 위협 감지, SNS 알림, 심각도 필터 | ✅ 완료 |
-| [codepipeline](./codepipeline/) | CodePipeline, CodeBuild, ECS 배포 (Rolling/Blue-Green) | ✅ 완료 |
+| [vpc](./legacy/vpc/) | VPC, 서브넷, NAT Gateway, VPC Endpoints, Flow Logs | ✅ 완료 |
+| [ec2](./legacy/ec2/) | EC2 인스턴스, EBS, Security Groups, IAM 프로파일 | ✅ 완료 |
+| [alb](./legacy/alb/) | Application Load Balancer, HTTPS/ACM, 액세스 로그 | ✅ 완료 |
+| [rds](./legacy/rds/) | RDS MySQL 8.0, Multi-AZ, 백업, Performance Insights | ✅ 완료 |
+| [s3](./legacy/s3/) | S3 버킷, 버전 관리, 수명 주기, 암호화 | ✅ 완료 |
+| [cloudfront](./legacy/cloudfront/) | CloudFront CDN, OAC, WAF 연동, 커스텀 도메인 | ✅ 완료 |
+| [waf](./legacy/waf/) | WAF v2, IP 차단, 레이트 리밋, 관리형 규칙 | ✅ 완료 |
+| [iam](./legacy/iam/) | IAM 역할: EC2, GitHub OIDC (CI/CD), EKS IRSA | ✅ 완료 |
+| [kms](./legacy/kms/) | KMS 키, 자동 교체, 멀티 리전 | ✅ 완료 |
+| [secrets-manager](./legacy/secrets-manager/) | Secrets Manager, KMS 암호화, 자동 교체 | ✅ 완료 |
+| [eks](./legacy/eks/) | EKS 클러스터, 관리형 노드 그룹, Karpenter, IRSA | ✅ 완료 |
+| [ecr](./legacy/ecr/) | ECR, 이미지 스캔, 수명 주기 정책 | ✅ 완료 |
+| [elasticache](./legacy/elasticache/) | ElastiCache Redis, Multi-AZ, 암호화, 스냅샷 | ✅ 완료 |
+| [dynamodb](./legacy/dynamodb/) | DynamoDB, OnDemand/Provisioned, GSI, PITR | ✅ 완료 |
+| [cloudwatch](./legacy/cloudwatch/) | CloudWatch Logs, 알람, 대시보드, SNS | ✅ 완료 |
+| [bastion](./legacy/bastion/) | Bastion 호스트, SSM Session Manager, SSH | ✅ 완료 |
+| [tgw](./legacy/tgw/) | Transit Gateway, 허브-앤-스포크, VPN, RAM 공유 | ✅ 완료 |
+| [route53](./legacy/route53/) | 호스팅 존, DNS 레코드, 헬스 체크, 페일오버 | ✅ 완료 |
+| [sqs-sns](./legacy/sqs-sns/) | SQS 큐, SNS 토픽, DLQ, 구독 | ✅ 완료 |
+| [backup](./legacy/backup/) | AWS Backup, 볼트, 계획, 보존 기간 관리 | ✅ 완료 |
+| [guardduty](./legacy/guardduty/) | GuardDuty, 위협 감지, SNS 알림, 심각도 필터 | ✅ 완료 |
+| [codepipeline](./legacy/codepipeline/) | CodePipeline, CodeBuild, ECS 배포 (Rolling/Blue-Green) | ✅ 완료 |
 
 ---
 
@@ -105,7 +105,7 @@ terraform-practice/
 ### 레거시 패턴 (기존 모듈 코드 보존)
 
 ```
-<모듈명>/
+legacy/<모듈명>/
 ├── modules/<모듈명>/        # Terragrunt에서 source로 참조
 │   ├── main.tf
 │   ├── variables.tf

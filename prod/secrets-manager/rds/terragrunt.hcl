@@ -46,7 +46,7 @@ dependency "rds" {
 }
 
 terraform {
-  source = "../../../secrets-manager/modules/secrets-manager"
+  source = "../../../legacy/secrets-manager/modules/secrets-manager"
 }
 
 prevent_destroy = true  # Terragrunt: run-all destroy 실행 차단

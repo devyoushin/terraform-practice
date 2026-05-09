@@ -1,0 +1,31 @@
+###############################################
+# terraform.tfvars.example
+# 이 파일을 참고하여 각 환경의 terraform.tfvars를 작성하세요.
+# cp terraform.tfvars.example envs/dev/terraform.tfvars
+###############################################
+
+aws_region   = "ap-northeast-2"
+project_name = "my-project"   # ← 프로젝트 이름 입력
+owner        = "infra-team"   # ← 담당자/팀 이름 입력
+
+# -----------------------------------------------
+# 네트워크 (terraform-vpc 출력값 참조)
+# -----------------------------------------------
+vpc_id    = "vpc-xxxxxxxxxxxxxxxxx"   # ← VPC ID
+subnet_id = "subnet-xxxxxxxxxxxxxxxxx"   # SSM 전용: 프라이빗 서브넷 권장
+
+# -----------------------------------------------
+# EC2 인스턴스
+# -----------------------------------------------
+ami_id        = "ami-xxxxxxxxxxxxxxxxx"   # ← Amazon Linux 2023 AMI ID (리전별 상이)
+instance_type = "t3.micro"
+
+# -----------------------------------------------
+# 접속 방식 (기본: SSM Session Manager 전용, 보안상 권장)
+# -----------------------------------------------
+enable_ssh = false   # true: SSH Bastion, false: SSM 전용 (권장)
+
+# SSH Bastion 모드일 때만 설정
+# key_pair_name    = "my-key-pair"
+# allowed_ssh_cidr = ["111.222.333.444/32"]   # ← 내 IP만 허용
+# create_eip       = false   # 고정 IP 필요 시 true

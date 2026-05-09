@@ -1,0 +1,57 @@
+###############################################################################
+### Pre-commit 훅 설정
+### 설치: pip install pre-commit && pre-commit install
+### 수동 실행: pre-commit run --all-files
+###############################################################################
+
+repos:
+  ### 기본 파일 검사 (공백, 파일 끝, YAML 유효성 등)
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+        name: 줄 끝 공백 제거
+      - id: end-of-file-fixer
+        name: 파일 끝 개행 문자 확인
+      - id: check-yaml
+        name: YAML 유효성 검사
+      - id: check-merge-conflict
+        name: 병합 충돌 마커 검사
+      - id: detect-private-key
+        name: 개인 키 감지 (커밋 차단)
+
+  ### Terraform 포맷팅 검사
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.92.0
+    hooks:
+      - id: terraform_fmt
+        name: Terraform 코드 포맷팅
+        args:
+          - --args=-recursive
+
+      - id: terraform_validate
+        name: Terraform 유효성 검사
+        args:
+          - --init-args=-backend=false
+
+      - id: terraform_tflint
+        name: Terraform Lint 검사
+        args:
+          - --args=--minimum-failure-severity=warning
+        # tflint 설치 필요: brew install tflint
+
+      - id: terraform_docs
+        name: Terraform 문서 자동 생성
+        args:
+          - --hook-config=--path-to-file=README.md
+          - --hook-config=--add-to-existing-file=true
+          - --hook-config=--create-file-if-not-exist=false
+        # terraform-docs 설치 필요: brew install terraform-docs
+
+  ### 시크릿/민감 정보 감지
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.4
+    hooks:
+      - id: gitleaks
+        name: Gitleaks - 민감 정보 감지
+        # gitleaks 설치 필요: brew install gitleaks

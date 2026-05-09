@@ -45,7 +45,7 @@ dependency "kms_eks" {
 }
 
 terraform {
-  source = "../../eks/modules/eks"
+  source = "../../legacy/eks/modules/eks"
 }
 
 prevent_destroy = true  # Terragrunt: run-all destroy 실행 차단

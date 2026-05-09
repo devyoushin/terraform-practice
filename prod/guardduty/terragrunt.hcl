@@ -35,7 +35,7 @@ dependency "cloudwatch" {
 }
 
 terraform {
-  source = "../../guardduty/modules/guardduty"
+  source = "../../legacy/guardduty/modules/guardduty"
 }
 
 inputs = {

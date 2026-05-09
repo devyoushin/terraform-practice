@@ -21,7 +21,7 @@ include "root" {
 }
 
 terraform {
-  source = "../../../ecr/modules/ecr"
+  source = "../../../legacy/ecr/modules/ecr"
 }
 
 inputs = {

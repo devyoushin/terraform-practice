@@ -30,7 +30,7 @@ dependency "ecr_app" {
 }
 
 terraform {
-  source = "../../codepipeline/modules/codepipeline"
+  source = "../../legacy/codepipeline/modules/codepipeline"
 }
 
 inputs = {

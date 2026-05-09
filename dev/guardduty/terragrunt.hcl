@@ -18,7 +18,7 @@ include "root" {
 }
 
 terraform {
-  source = "../../guardduty/modules/guardduty"
+  source = "../../legacy/guardduty/modules/guardduty"
 }
 
 inputs = {

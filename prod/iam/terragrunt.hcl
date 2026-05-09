@@ -20,7 +20,7 @@ include "root" {
 }
 
 terraform {
-  source = "../../iam/modules/ec2-role"
+  source = "../../legacy/iam/modules/ec2-role"
 }
 
 inputs = {

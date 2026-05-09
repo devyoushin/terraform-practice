@@ -42,7 +42,7 @@ dependency "iam" {
 }
 
 terraform {
-  source = "../../ec2/modules/ec2"
+  source = "../../legacy/ec2/modules/ec2"
 }
 
 inputs = {

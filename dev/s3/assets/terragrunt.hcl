@@ -16,7 +16,7 @@ include "root" {
 }
 
 terraform {
-  source = "../../../s3/modules/s3"
+  source = "../../../legacy/s3/modules/s3"
 }
 
 inputs = {

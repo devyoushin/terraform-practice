@@ -1,0 +1,51 @@
+###############################################
+# .pre-commit-config.yaml
+# Git 커밋 전 자동 검사 설정
+#
+# 설치:
+#   pip install pre-commit
+#   pre-commit install
+#
+# 수동 실행:
+#   pre-commit run --all-files
+###############################################
+
+repos:
+  # Terraform 공식 훅
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.92.0
+    hooks:
+      # terraform fmt: 코드 포맷 자동 수정
+      - id: terraform_fmt
+
+      # terraform validate: 문법/의존성 검사
+      - id: terraform_validate
+
+      # tflint: 모범 사례 및 잠재적 오류 검사
+      - id: terraform_tflint
+        args:
+          - --args=--only=terraform_deprecated_interpolation
+          - --args=--only=terraform_deprecated_index
+          - --args=--only=terraform_unused_declarations
+          - --args=--only=terraform_comment_syntax
+          - --args=--only=terraform_documented_outputs
+          - --args=--only=terraform_documented_variables
+          - --args=--only=terraform_typed_variables
+          - --args=--only=terraform_naming_convention
+          - --args=--only=terraform_required_version
+          - --args=--only=terraform_required_providers
+
+  # 민감 정보 탐지
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.2
+    hooks:
+      - id: gitleaks
+
+  # 기본 파일 검사
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-merge-conflict
+      - id: check-yaml

@@ -55,7 +55,7 @@ dependency "kms_s3" {
 }
 
 terraform {
-  source = "../../cloudfront/modules/cloudfront"
+  source = "../../legacy/cloudfront/modules/cloudfront"
 }
 
 inputs = {

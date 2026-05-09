@@ -19,7 +19,7 @@ include "root" {
 }
 
 terraform {
-  source = "../../cloudwatch/modules/cloudwatch"
+  source = "../../legacy/cloudwatch/modules/cloudwatch"
 }
 
 inputs = {

@@ -47,7 +47,7 @@ dependency "cloudwatch" {
 }
 
 terraform {
-  source = "../../route53/modules/route53"
+  source = "../../legacy/route53/modules/route53"
 }
 
 inputs = {

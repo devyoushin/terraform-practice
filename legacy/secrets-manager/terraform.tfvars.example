@@ -1,0 +1,35 @@
+###############################################
+# terraform.tfvars.example
+# 이 파일을 참고하여 각 환경의 terraform.tfvars를 작성하세요.
+# cp terraform.tfvars.example envs/dev/terraform.tfvars
+###############################################
+
+aws_region   = "ap-northeast-2"
+project_name = "my-project"   # ← 프로젝트 이름 입력
+owner        = "infra-team"   # ← 담당자/팀 이름 입력
+
+# -----------------------------------------------
+# 시크릿 설정
+# -----------------------------------------------
+secret_suffix = "rds"   # ← 용도 입력 (예: rds, api-key, jwt-secret, smtp)
+
+# 시크릿 복구 대기 기간
+# dev: 0 (즉시 삭제), staging/prod: 7~30
+recovery_window_in_days = 30
+
+# -----------------------------------------------
+# 초기 시크릿 값 (선택 - 이후 콘솔/CLI에서 직접 관리 권장)
+# -----------------------------------------------
+# rds_secret_string = "{\"username\": \"admin\", \"password\": \"CHANGE_ME\"}"
+
+# -----------------------------------------------
+# KMS 암호화 (선택)
+# -----------------------------------------------
+# kms_key_arn = "arn:aws:kms:ap-northeast-2:123456789012:key/xxxxxxxx"
+
+# -----------------------------------------------
+# 자동 교체 (Lambda 함수 필요)
+# -----------------------------------------------
+# enable_rotation      = false
+# rotation_lambda_arn  = "arn:aws:lambda:ap-northeast-2:123456789012:function:..."
+# rotation_days        = 30

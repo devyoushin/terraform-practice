@@ -1,0 +1,30 @@
+###############################################
+# terraform.tfvars.example
+# 이 파일을 참고하여 각 환경의 terraform.tfvars를 작성하세요.
+# cp terraform.tfvars.example envs/dev/terraform.tfvars
+###############################################
+
+aws_region   = "ap-northeast-2"
+project_name = "my-project"   # ← 프로젝트 이름 입력
+owner        = "infra-team"   # ← 담당자/팀 이름 입력
+
+# -----------------------------------------------
+# WAF 연결 대상 (선택)
+# -----------------------------------------------
+# alb_arn = "arn:aws:elasticloadbalancing:ap-northeast-2:123456789012:loadbalancer/app/..."
+
+# -----------------------------------------------
+# Rate Limiting (DDoS 방어, prod 권장)
+# -----------------------------------------------
+# rate_limit = 2000   # 5분당 IP별 최대 요청 수 (최소 100)
+
+# -----------------------------------------------
+# IP 차단/허용 목록 (선택)
+# -----------------------------------------------
+# blocked_ip_addresses = ["1.2.3.4/32", "10.0.0.0/8"]
+# allowed_ip_addresses = []   # default_action = "block"일 때 화이트리스트
+
+# -----------------------------------------------
+# WAF 로그 (선택 - Kinesis Firehose 또는 CloudWatch Logs ARN)
+# -----------------------------------------------
+# log_destination_arn = "arn:aws:firehose:ap-northeast-2:123456789012:deliverystream/..."

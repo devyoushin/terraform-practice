@@ -17,7 +17,7 @@ include "root" {
 }
 
 terraform {
-  source = "../../../dynamodb/modules/dynamodb"
+  source = "../../../legacy/dynamodb/modules/dynamodb"
 }
 
 inputs = {

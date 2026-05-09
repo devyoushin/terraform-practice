@@ -47,7 +47,7 @@ dependency "kms_rds" {
 }
 
 terraform {
-  source = "../../rds/modules/rds"
+  source = "../../legacy/rds/modules/rds"
 }
 
 prevent_destroy = true  # Terragrunt: run-all destroy 실행 차단

@@ -1,0 +1,23 @@
+# Terraform 상태 파일 - 원격 백엔드(S3)에서 관리
+*.tfstate
+*.tfstate.*
+
+# Terraform 작업 디렉토리
+.terraform/
+
+# Terraform 잠금 파일 (공유 시 필요하면 주석 해제)
+.terraform.lock.hcl
+
+# 변수값 파일 - 민감 정보 포함 가능성 (개인별 관리)
+terraform.tfvars
+*.auto.tfvars
+
+# 플랜 파일
+tfplan
+*.tfplan
+
+# 크래시 로그
+crash.log
+
+# macOS 시스템 파일
+.DS_Store
