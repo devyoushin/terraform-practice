@@ -83,7 +83,7 @@ terraform-practice/
 |--------|------|---------|
 | `/new-doc` | 새 모듈 README 생성 | `/new-doc opensearch` |
 | `/new-runbook` | 새 런북 생성 | `/new-runbook RDS 스냅샷 복구` |
-| `/review-doc` | 코드/문서 검토 | `/review-doc eks/modules/eks/main.tf` |
+| `/review-doc` | 코드/문서 검토 | `/review-doc legacy/eks/modules/eks/main.tf` |
 | `/add-troubleshooting` | 트러블슈팅 케이스 추가 | `/add-troubleshooting EKS 노드 드레인 타임아웃` |
 | `/search-kb` | 지식베이스 검색 | `/search-kb Karpenter 배포 순서` |
 
@@ -93,7 +93,7 @@ terraform-practice/
 
 - **문서(README, CLAUDE.md)는 반드시 한국어로 작성**
 - **코드 주석도 한국어** — 모듈 상단에 `### === ... ===` 블록, 섹션 구분에 `### --- ... ---` 사용
-- README 스타일 기준: `eks/README.md` 참고
+- README 스타일 기준: `legacy/eks/README.md` 참고
 
 ### 코드 주석 패턴
 
@@ -270,7 +270,7 @@ terraform apply tfplan.binary
 
 ## 현재 구현 상태
 
-### 레거시 패턴 (modules/ + envs/)
+### 레거시 패턴 (legacy/ 내)
 
 | 모듈 | modules | envs/dev | envs/prod | Makefile | pre-commit | README |
 |------|---------|----------|-----------|----------|------------|--------|
