@@ -25,6 +25,9 @@ crash.*.log
 *.pem
 *.key
 
+# Local Claude workspace
+.claude/
+
 # macOS
 .DS_Store
 
