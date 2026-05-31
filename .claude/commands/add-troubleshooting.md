@@ -29,4 +29,4 @@ aws <service> describe-...
 ```
 
 3. 해당 모듈 README.md의 트러블슈팅 섹션에 추가하세요.
-4. 동일한 내용이 여러 모듈에 적용된다면 `rules/terraform-conventions.md`에도 주의사항으로 추가하세요.
+4. 동일한 내용이 여러 모듈에 적용된다면 `docs/rules/terraform-conventions.md`에도 주의사항으로 추가하세요.

@@ -6,7 +6,7 @@
 
 다음 단계를 수행하세요:
 
-1. `templates/service-doc.md`를 읽어 템플릿 구조를 확인하세요.
+1. `docs/templates/service-doc.md`를 읽어 템플릿 구조를 확인하세요.
 2. 아래 카테고리에서 적절한 위치를 결정하세요:
    - 컴퓨팅: ec2, eks, ecr
    - 네트워크: vpc, alb, tgw, route53
@@ -20,4 +20,4 @@
    - 환경별 설정 차이 (dev vs prod)
    - Makefile 사용법
    - 트러블슈팅 섹션
-   - 구현 체크리스트 (rules/terraform-conventions.md 기준)
+   - 구현 체크리스트 (docs/rules/terraform-conventions.md 기준)

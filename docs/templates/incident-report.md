@@ -62,4 +62,4 @@ aws cloudtrail lookup-events ...
 ## 6. 아키텍처 개선사항
 
 - {개선 1}: `{관련 모듈}` 수정 필요
-- {개선 2}: `rules/terraform-conventions.md` 업데이트 필요
+- {개선 2}: `docs/rules/terraform-conventions.md` 업데이트 필요

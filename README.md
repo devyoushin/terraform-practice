@@ -5,6 +5,17 @@
 
 ---
 
+## 어디서 시작할까
+
+- 문서 지도: `docs/README.md`
+- AI 작업 지침: `CLAUDE.md`
+- Codex 작업 지침: `AGENTS.md` → `CLAUDE.md`
+- 최초 1회 state 인프라: `bootstrap/`
+- 권장 실행 경로: `dev/`, `prod/`의 Terragrunt 호출부
+- 모듈 소스: `legacy/{module}/`
+
+---
+
 ## 아키텍처 개요
 
 ```
@@ -47,6 +58,14 @@
 
 ```
 terraform-practice/
+├── README.md                 # 프로젝트 입구
+├── CLAUDE.md                 # Claude/Codex 공통 작업 지침 원본
+├── AGENTS.md -> CLAUDE.md    # Codex용 지침 링크
+├── docs/                     # 문서 규칙, 템플릿, AI 에이전트 지침
+│   ├── README.md
+│   ├── agents/
+│   ├── rules/
+│   └── templates/
 ├── terragrunt.hcl           # 루트: remote_state + provider 자동 생성
 ├── _envs/                   # 환경별 변수 참조 문서 (dev.hcl, prod.hcl)
 ├── bootstrap/               # Remote State 인프라 (최초 1회 실행)
@@ -65,6 +84,20 @@ terraform-practice/
         ├── envs/{dev,prod}/ # 직접 apply 용
         └── Makefile
 ```
+
+## 구조 기준
+
+이 저장소는 일반적인 문서형 practice 저장소보다 실행 코드가 많습니다. 따라서 `prometheus-practice`처럼 문서 보조 자료는 `docs/`에 모으되, 실제 Terraform 실행 경로는 루트에 유지합니다.
+
+| 경로 | 역할 |
+|------|------|
+| `docs/` | AI 에이전트 지침, 작성 규칙, 템플릿 |
+| `bootstrap/` | Terraform backend용 S3/DynamoDB 최초 생성 |
+| `dev/`, `prod/` | 환경별 Terragrunt live configuration |
+| `legacy/` | 재사용 Terraform 모듈과 레거시 직접 실행 예제 |
+| `_envs/` | 환경별 공통 변수 참조 |
+
+`CLAUDE.md`와 `AGENTS.md`는 별도 파일로 관리하지 않습니다. `AGENTS.md`는 `CLAUDE.md`를 가리키는 심볼릭 링크이므로, 작업 지침은 `CLAUDE.md`만 수정하면 됩니다.
 
 ---
 
