@@ -6,7 +6,7 @@
 ### S3 버킷과 DynamoDB 테이블을 생성합니다.
 ###
 ### 실행 방법:
-###   cd bootstrap
+###   cd ops/bootstrap
 ###   terraform init
 ###   terraform apply
 ###

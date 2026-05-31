@@ -10,16 +10,16 @@
 ###  전제 조건: bootstrap/ 디렉토리를 먼저 실행하여
 ###            S3 버킷과 DynamoDB 테이블을 생성해야 합니다.
 ###
-###  cd bootstrap && terraform init && terraform apply
+###  cd ops/bootstrap && terraform init && terraform apply
 ### └─────────────────────────────────────────────────────────────┘
 ###
 ### 사용 방법:
 ###   # 단일 모듈 실행
-###   cd dev/vpc && terragrunt plan
+###   cd ops/dev/vpc && terragrunt plan
 ###
 ###   # 환경 전체 실행 (의존성 순서 자동 처리)
-###   terragrunt run-all plan  --terragrunt-working-dir dev/
-###   terragrunt run-all apply --terragrunt-working-dir dev/
+###   terragrunt run-all plan  --terragrunt-working-dir ops/dev/
+###   terragrunt run-all apply --terragrunt-working-dir ops/dev/
 ### =============================================================================
 
 locals {

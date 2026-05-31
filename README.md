@@ -8,6 +8,7 @@
 ## 어디서 시작할까
 
 - 문서 지도: `docs/README.md`
+- 운영 실행 가이드: `ops/README.md`
 - AI 작업 지침: `CLAUDE.md`
 - Codex 작업 지침: `AGENTS.md` → `CLAUDE.md`
 - 최초 1회 state 인프라: `ops/bootstrap/`
@@ -76,6 +77,10 @@ terraform-practice/
     ├── prod/                 # PROD 환경 (VPC CIDR 10.0.0.0/16, 3 AZ)
     │   ├── env.hcl           # environment = "prod"
     │   └── {모듈}/terragrunt.hcl
+    ├── scripts/              # 반복 점검용 보조 스크립트
+    ├── checklists/           # apply 전 점검, 모듈 리뷰 기준
+    ├── runbooks/             # drift, state import 등 운영 절차
+    ├── outputs/              # plan, graph, 점검 결과 보관 위치
     └── legacy/               # 레거시 패턴 (Terragrunt source로 참조)
         └── {모듈}/
             ├── modules/{모듈}/
@@ -94,6 +99,10 @@ terraform-practice/
 | `ops/dev/`, `ops/prod/` | 환경별 Terragrunt live configuration |
 | `ops/legacy/` | 재사용 Terraform 모듈과 레거시 직접 실행 예제 |
 | `ops/_envs/` | 환경별 공통 변수 참조 |
+| `ops/scripts/` | 반복 plan, state 요약 등 보조 스크립트 |
+| `ops/checklists/` | apply 전 점검과 모듈 리뷰 기준 |
+| `ops/runbooks/` | drift detection, state import 운영 절차 |
+| `ops/outputs/` | plan, graph, 점검 결과 보관 위치 |
 
 `CLAUDE.md`와 `AGENTS.md`는 별도 파일로 관리하지 않습니다. `AGENTS.md`는 `CLAUDE.md`를 가리키는 심볼릭 링크이므로, 작업 지침은 `CLAUDE.md`만 수정하면 됩니다.
 

@@ -31,8 +31,25 @@ terraform-practice/
     ├── bootstrap/             # Remote State 인프라 (S3 + DynamoDB)
     ├── dev/                   # [Terragrunt] DEV 환경 모듈 호출
     ├── prod/                  # [Terragrunt] PROD 환경 모듈 호출
+    ├── scripts/               # 반복 점검용 보조 스크립트
+    ├── checklists/            # apply 전 점검, 모듈 리뷰 기준
+    ├── runbooks/              # drift, state import 등 운영 절차
+    ├── outputs/               # plan, graph, 점검 결과 보관 위치
     └── legacy/                # [레거시] 재사용 Terraform 모듈
 ```
+
+---
+
+## 운영 보조 자료
+
+`ops/README.md`를 운영 실행 가이드의 기준 문서로 사용합니다.
+
+| 경로 | 용도 |
+|------|------|
+| `ops/scripts/` | 반복 plan, state 요약 등 보조 스크립트 |
+| `ops/checklists/` | apply 전 점검과 모듈 리뷰 체크리스트 |
+| `ops/runbooks/` | drift detection, state import 런북 |
+| `ops/outputs/` | plan, graph, 점검 결과 보관 위치 |
 
 ---
 
