@@ -65,7 +65,10 @@ terraform-practice/
 ├── docs/                     # 문서 규칙, 템플릿, AI 에이전트 지침
 │   ├── README.md
 │   ├── agents/
+│   ├── checklists/
+│   ├── runbooks/
 │   ├── rules/
+│   ├── outputs.md
 │   └── templates/
 └── ops/                      # 실제 Terraform/Terragrunt 실행 자산
     ├── terragrunt.hcl        # ops 루트: remote_state + provider 자동 생성
@@ -78,8 +81,6 @@ terraform-practice/
     │   ├── env.hcl           # environment = "prod"
     │   └── {모듈}/terragrunt.hcl
     ├── scripts/              # 반복 점검용 보조 스크립트
-    ├── checklists/           # apply 전 점검, 모듈 리뷰 기준
-    ├── runbooks/             # drift, state import 등 운영 절차
     ├── outputs/              # plan, graph, 점검 결과 보관 위치
     └── legacy/               # 레거시 패턴 (Terragrunt source로 참조)
         └── {모듈}/
@@ -94,14 +95,15 @@ terraform-practice/
 
 | 경로 | 역할 |
 |------|------|
-| `docs/` | AI 에이전트 지침, 작성 규칙, 템플릿 |
+| `docs/` | AI 에이전트 지침, 작성 규칙, 체크리스트, 런북, 템플릿 |
+| `docs/checklists/` | apply 전 점검과 모듈 리뷰 기준 |
+| `docs/runbooks/` | drift detection, state import 운영 절차 |
+| `docs/outputs.md` | plan, graph, 점검 결과 보관 규칙 |
 | `ops/bootstrap/` | Terraform backend용 S3/DynamoDB 최초 생성 |
 | `ops/dev/`, `ops/prod/` | 환경별 Terragrunt live configuration |
 | `ops/legacy/` | 재사용 Terraform 모듈과 레거시 직접 실행 예제 |
 | `ops/_envs/` | 환경별 공통 변수 참조 |
 | `ops/scripts/` | 반복 plan, state 요약 등 보조 스크립트 |
-| `ops/checklists/` | apply 전 점검과 모듈 리뷰 기준 |
-| `ops/runbooks/` | drift detection, state import 운영 절차 |
 | `ops/outputs/` | plan, graph, 점검 결과 보관 위치 |
 
 `CLAUDE.md`와 `AGENTS.md`는 별도 파일로 관리하지 않습니다. `AGENTS.md`는 `CLAUDE.md`를 가리키는 심볼릭 링크이므로, 작업 지침은 `CLAUDE.md`만 수정하면 됩니다.

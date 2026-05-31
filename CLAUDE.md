@@ -23,6 +23,8 @@ terraform-practice/
 ├── docs/
 │   ├── README.md              # 문서 보조 자료 안내
 │   ├── agents/                # 전문 에이전트 정의
+│   ├── checklists/            # apply 전 점검, 모듈 리뷰 기준
+│   ├── runbooks/              # drift, state import 등 운영 절차
 │   ├── templates/             # 문서 템플릿
 │   └── rules/                 # 작성 규칙
 └── ops/                       # 실제 Terraform/Terragrunt 실행 자산
@@ -32,8 +34,6 @@ terraform-practice/
     ├── dev/                   # [Terragrunt] DEV 환경 모듈 호출
     ├── prod/                  # [Terragrunt] PROD 환경 모듈 호출
     ├── scripts/               # 반복 점검용 보조 스크립트
-    ├── checklists/            # apply 전 점검, 모듈 리뷰 기준
-    ├── runbooks/              # drift, state import 등 운영 절차
     ├── outputs/               # plan, graph, 점검 결과 보관 위치
     └── legacy/                # [레거시] 재사용 Terraform 모듈
 ```
@@ -47,9 +47,9 @@ terraform-practice/
 | 경로 | 용도 |
 |------|------|
 | `ops/scripts/` | 반복 plan, state 요약 등 보조 스크립트 |
-| `ops/checklists/` | apply 전 점검과 모듈 리뷰 체크리스트 |
-| `ops/runbooks/` | drift detection, state import 런북 |
 | `ops/outputs/` | plan, graph, 점검 결과 보관 위치 |
+| `docs/checklists/` | apply 전 점검과 모듈 리뷰 체크리스트 |
+| `docs/runbooks/` | drift detection, state import 런북 |
 
 ---
 
