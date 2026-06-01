@@ -8,8 +8,14 @@
 ## 어디서 시작할까
 
 - 문서 지도: `docs/README.md`
+- 시작 가이드: `docs/getting-started.md`
+- 모듈 구축 가이드: `docs/module-build-guide.md`
 - 운영 실행 가이드: `ops/README.md`
-- AI 작업 지침: `CLAUDE.md`
+- 규칙 가이드: `docs/rules/README.md`
+- 체크리스트: `docs/checklists/README.md`
+- 런북: `docs/runbooks/README.md`
+- AI 작업 지침: `docs/agents/README.md`
+- Claude 원본 지침: `CLAUDE.md`
 - Codex 작업 지침: `AGENTS.md` → `CLAUDE.md`
 - 최초 1회 state 인프라: `ops/bootstrap/`
 - 권장 실행 경로: `ops/dev/`, `ops/prod/`의 Terragrunt 호출부
@@ -66,6 +72,8 @@ terraform-practice/
 │   ├── README.md
 │   ├── agents/
 │   ├── checklists/
+│   ├── getting-started.md
+│   ├── module-build-guide.md
 │   ├── runbooks/
 │   ├── rules/
 │   ├── outputs.md
@@ -96,8 +104,13 @@ terraform-practice/
 | 경로 | 역할 |
 |------|------|
 | `docs/` | AI 에이전트 지침, 작성 규칙, 체크리스트, 런북, 템플릿 |
+| `docs/getting-started.md` | 저장소 읽는 순서 |
+| `docs/module-build-guide.md` | Terragrunt/모듈 구조 이해 |
 | `docs/checklists/` | apply 전 점검과 모듈 리뷰 기준 |
 | `docs/runbooks/` | drift detection, state import 운영 절차 |
+| `docs/rules/` | Terraform 코드/문서 작성 규칙 |
+| `docs/agents/` | AI 작업 지침 |
+| `docs/templates/` | README, 런북, 장애 보고서 템플릿 |
 | `docs/outputs.md` | plan, graph, 점검 결과 보관 규칙 |
 | `ops/bootstrap/` | Terraform backend용 S3/DynamoDB 최초 생성 |
 | `ops/dev/`, `ops/prod/` | 환경별 Terragrunt live configuration |
