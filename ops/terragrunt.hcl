@@ -15,33 +15,37 @@
 ###
 ### 사용 방법:
 ###   # 단일 모듈 실행
-###   cd ops/dev/vpc && terragrunt plan
+###   cd ops/live/nonprod/ap-northeast-2/dev/vpc && terragrunt plan
 ###
 ###   # 환경 전체 실행 (의존성 순서 자동 처리)
-###   terragrunt run-all plan  --terragrunt-working-dir ops/dev/
-###   terragrunt run-all apply --terragrunt-working-dir ops/dev/
+###   terragrunt run-all plan  --terragrunt-working-dir ops/live/nonprod/ap-northeast-2/dev/
+###   terragrunt run-all apply --terragrunt-working-dir ops/live/nonprod/ap-northeast-2/dev/
 ### =============================================================================
 
 locals {
   project_name = "terraform-practice"
-  aws_region   = "ap-northeast-2"
 
-  # 현재 경로의 env.hcl 에서 환경 정보 자동 감지
-  # dev/vpc/terragrunt.hcl  → dev/env.hcl  → environment = "dev"
-  # prod/rds/terragrunt.hcl → prod/env.hcl → environment = "prod"
-  env_vars    = read_terragrunt_config(find_in_parent_folders("env.hcl"))
-  environment = local.env_vars.locals.environment
-  owner       = local.env_vars.locals.owner
-  cost_center = local.env_vars.locals.cost_center
+  # live/<account>/<region>/<environment>/<component> 계층에서
+  # 계정, 리전, 환경 정보를 자동 감지합니다.
+  account_vars = read_terragrunt_config(find_in_parent_folders("account.hcl"))
+  region_vars  = read_terragrunt_config(find_in_parent_folders("region.hcl"))
+  env_vars     = read_terragrunt_config(find_in_parent_folders("env.hcl"))
+
+  account_name = local.account_vars.locals.account_name
+  account_id   = local.account_vars.locals.account_id
+  aws_region   = local.region_vars.locals.aws_region
+  environment  = local.env_vars.locals.environment
+  owner        = local.env_vars.locals.owner
+  cost_center  = local.env_vars.locals.cost_center
 }
 
 ### -----------------------------------------------------------------------
 ### 원격 상태(Remote State) 설정
 ###
-### 상태 파일 경로 패턴: {모듈 경로}/terraform.tfstate
-###   dev/vpc/terraform.tfstate
-###   dev/kms/rds/terraform.tfstate
-###   prod/rds/terraform.tfstate
+### 상태 파일 경로 패턴: live/{account}/{region}/{env}/{module}/terraform.tfstate
+###   live/nonprod/ap-northeast-2/dev/vpc/terraform.tfstate
+###   live/nonprod/ap-northeast-2/dev/kms/rds/terraform.tfstate
+###   live/prod/ap-northeast-2/prod/rds/terraform.tfstate
 ###
 ### path_relative_to_include() 가 각 terragrunt.hcl의 상대 경로를 자동 계산
 ### -----------------------------------------------------------------------
@@ -79,6 +83,7 @@ provider "aws" {
   default_tags {
     tags = {
       Project     = "${local.project_name}"
+      Account     = "${local.account_name}"
       Environment = "${local.environment}"
       ManagedBy   = "terragrunt"
       Owner       = "${local.owner}"
@@ -110,6 +115,7 @@ inputs = {
 
   common_tags = {
     Project     = local.project_name
+    Account     = local.account_name
     Environment = local.environment
     ManagedBy   = "terragrunt"
     Owner       = local.owner

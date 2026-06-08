@@ -47,8 +47,8 @@ terraform apply
 ### 새 모듈을 볼 때
 
 1. `docs/module-build-guide.md`에서 모듈 종류와 배포 흐름을 확인한다.
-2. 해당 모듈의 `ops/legacy/<module>/README.md`를 읽는다.
-3. `ops/dev/<module>/terragrunt.hcl`과 `ops/prod/<module>/terragrunt.hcl`을 확인한다.
+2. 해당 모듈의 `ops/modules/<module>/README.md`를 읽는다.
+3. `ops/live/nonprod/ap-northeast-2/dev/<module>/terragrunt.hcl`과 `ops/live/prod/ap-northeast-2/prod/<module>/terragrunt.hcl`을 확인한다.
 4. `docs/checklists/pre-apply.md`를 읽고 plan을 만든다.
 5. prod 반영 전에는 `terraform plan` 결과를 저장하고 검토한다.
 
@@ -61,15 +61,15 @@ terraform apply
 ## 4. 기본 실행 명령
 
 ```bash
-cd ops/dev/vpc
+cd ops/live/nonprod/ap-northeast-2/dev/vpc
 terragrunt init
 terragrunt plan
 terragrunt apply
 ```
 
 ```bash
-terragrunt run-all plan --terragrunt-working-dir ops/dev
-terragrunt run-all apply --terragrunt-working-dir ops/dev
+terragrunt run-all plan --terragrunt-working-dir ops/live/nonprod/ap-northeast-2/dev
+terragrunt run-all apply --terragrunt-working-dir ops/live/nonprod/ap-northeast-2/dev
 ```
 
 ## 5. 헷갈릴 때 보는 문서

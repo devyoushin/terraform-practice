@@ -32,10 +32,10 @@
 | 경로 | 내용 |
 |------|------|
 | `../ops/bootstrap/` | Remote State용 S3/DynamoDB 최초 생성 코드 |
-| `../ops/dev/` | dev 환경 Terragrunt 호출부 |
-| `../ops/prod/` | prod 환경 Terragrunt 호출부 |
-| `../ops/legacy/` | 재사용 Terraform 모듈과 레거시 직접 실행 구조 |
-| `../ops/_envs/` | 환경별 공통 변수 참조 파일 |
+| `../ops/live/nonprod/ap-northeast-2/dev/` | dev 환경 Terragrunt 호출부 |
+| `../ops/live/prod/ap-northeast-2/prod/` | prod 환경 Terragrunt 호출부 |
+| `../ops/modules/` | 재사용 Terraform 모듈과 standalone 직접 실행 구조 |
+| `../ops/envs/` | 환경별 공통 변수 참조 파일 |
 | `../ops/scripts/` | 반복 점검용 보조 스크립트 |
 | `../ops/outputs/` | plan, graph, 점검 결과 산출물 보관 위치 |
 | `../ops/README.md` | 실제 Terraform/Terragrunt 실행 가이드 |
@@ -55,5 +55,5 @@
 
 - 문서, 규칙, 템플릿은 `docs/` 아래에 둔다.
 - 실행 코드는 `ops/` 아래의 기존 환경/모듈 경계 안에서 수정한다.
-- 모듈 바로 옆의 `ops/legacy/*/README.md`는 해당 모듈의 로컬 설명서로 유지한다.
+- 모듈 바로 옆의 `ops/modules/*/README.md`는 해당 모듈의 로컬 설명서로 유지한다.
 - `AGENTS.md`는 `CLAUDE.md`를 가리키는 심볼릭 링크다. AI 작업 지침은 `CLAUDE.md`를 원본으로 관리한다.

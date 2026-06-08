@@ -17,7 +17,7 @@ terraform import 'module.example.aws_resource.this' resource-id
 Terragrunt 환경에서는 대상 모듈 디렉터리에서 실행합니다.
 
 ```bash
-cd ops/prod/vpc
+cd ops/live/prod/ap-northeast-2/prod/vpc
 terragrunt import 'module.vpc.aws_vpc.this' vpc-xxxxxxxx
 ```
 

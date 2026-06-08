@@ -4,8 +4,8 @@
 
 이 저장소는 두 계층으로 나뉜다.
 
-- `ops/dev`, `ops/prod`: Terragrunt 기반 실행 경로
-- `ops/legacy`: 재사용 가능한 Terraform 모듈과 레거시 직접 실행 예제
+- `ops/live/nonprod/ap-northeast-2/dev`, `ops/live/prod/ap-northeast-2/prod`: Terragrunt 기반 실행 경로
+- `ops/modules`: 재사용 가능한 Terraform 모듈과 standalone 직접 실행 예제
 
 ---
 
@@ -28,10 +28,10 @@
 | 영역 | 의미 |
 |------|------|
 | `ops/bootstrap/` | remote state S3/DynamoDB를 최초로 만드는 코드 |
-| `ops/dev/` | dev 환경 Terragrunt 호출부 |
-| `ops/prod/` | prod 환경 Terragrunt 호출부 |
-| `ops/_envs/` | 공통 변수 참조와 환경별 기준값 |
-| `ops/legacy/` | 재사용 모듈과 모듈별 README |
+| `ops/live/nonprod/ap-northeast-2/dev/` | dev 환경 Terragrunt 호출부 |
+| `ops/live/prod/ap-northeast-2/prod/` | prod 환경 Terragrunt 호출부 |
+| `ops/envs/` | 공통 변수 참조와 환경별 기준값 |
+| `ops/modules/` | 재사용 모듈과 모듈별 README |
 | `docs/` | 읽는 순서, 규칙, 체크리스트, 런북, 템플릿 |
 
 ---
@@ -59,9 +59,9 @@
 
 ### 2. 그 다음 코드 경계를 정한다
 
-- 재사용 가능한 리소스는 `ops/legacy/<module>/modules/<module>/`에 둔다.
-- 환경별 호출부는 `ops/legacy/<module>/envs/dev`, `ops/legacy/<module>/envs/prod`에 둔다.
-- Terragrunt 경로는 `ops/dev/<module>/terragrunt.hcl`, `ops/prod/<module>/terragrunt.hcl`에 둔다.
+- 재사용 가능한 리소스는 `ops/modules/<module>/modules/<module>/`에 둔다.
+- 환경별 호출부는 `ops/modules/<module>/envs/dev`, `ops/modules/<module>/envs/prod`에 둔다.
+- Terragrunt 경로는 `ops/live/nonprod/ap-northeast-2/dev/<module>/terragrunt.hcl`, `ops/live/prod/ap-northeast-2/prod/<module>/terragrunt.hcl`에 둔다.
 
 ### 3. 마지막에 검증한다
 
@@ -76,9 +76,9 @@
 
 ### 기존 모듈을 고칠 때
 
-1. `ops/legacy/<module>/README.md`를 본다.
+1. `ops/modules/<module>/README.md`를 본다.
 2. `variables.tf`, `outputs.tf`, `main.tf`를 확인한다.
-3. `ops/dev/<module>`와 `ops/prod/<module>`의 입력값 차이를 본다.
+3. `ops/live/nonprod/ap-northeast-2/dev/<module>`와 `ops/live/prod/ap-northeast-2/prod/<module>`의 입력값 차이를 본다.
 4. 문서가 바뀌면 `README.md`, `CLAUDE.md`, `docs/README.md`도 같이 갱신한다.
 
 ### 환경별 차이를 넣을 때
@@ -106,7 +106,7 @@
 | 개념 | 의미 |
 |------|------|
 | `bootstrap` | remote state를 만들기 위한 1회성 코드 |
-| `live config` | `ops/dev`, `ops/prod`의 환경별 실행 구성 |
+| `live config` | `ops/live/nonprod/ap-northeast-2/dev`, `ops/live/prod/ap-northeast-2/prod`의 환경별 실행 구성 |
 | `run-all` | 의존성을 보고 순차적으로 plan/apply하는 방식 |
 | `mock_outputs` | 아직 없는 의존성도 plan 단계에서 참조하게 하는 장치 |
 
