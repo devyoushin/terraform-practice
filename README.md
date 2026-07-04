@@ -7,19 +7,13 @@
 
 ## 어디서 시작할까
 
-- 문서 지도: `docs/README.md`
-- 시작 가이드: `docs/getting-started.md`
-- 모듈 구축 가이드: `docs/module-build-guide.md`
-- 운영 실행 가이드: `ops/README.md`
-- 규칙 가이드: `docs/rules/README.md`
-- 체크리스트: `docs/checklists/README.md`
-- 런북: `docs/runbooks/README.md`
-- AI 작업 지침: `docs/agents/README.md`
-- Claude 원본 지침: `CLAUDE.md`
-- Codex 작업 지침: `AGENTS.md` → `CLAUDE.md`
-- 최초 1회 state 인프라: `ops/bootstrap/`
-- 권장 실행 경로: `ops/live/nonprod/ap-northeast-2/dev/`, `ops/live/prod/ap-northeast-2/prod/`의 Terragrunt 호출부
-- 모듈 소스: `ops/modules/{module}/`
+| 목적 | 위치 |
+|------|------|
+| 처음 읽기 | [docs/01-guide/getting-started.md](docs/01-guide/getting-started.md) |
+| 모듈 만들기/수정 | [docs/01-guide/module-build-guide.md](docs/01-guide/module-build-guide.md) |
+| 실제 실행 | [ops/README.md](ops/README.md) |
+| 적용 전 점검 | [docs/03-operations/pre-apply-checklist.md](docs/03-operations/pre-apply-checklist.md) |
+| 전체 문서 지도 | [docs/README.md](docs/README.md) |
 
 ---
 
@@ -68,16 +62,13 @@ terraform-practice/
 ├── README.md                 # 프로젝트 입구
 ├── CLAUDE.md                 # Claude/Codex 공통 작업 지침 원본
 ├── AGENTS.md -> CLAUDE.md    # Codex용 지침 링크
-├── docs/                     # 문서 규칙, 템플릿, AI 에이전트 지침
+├── docs/                     # 가이드, 표준, 운영 절차, 템플릿, AI 지침
 │   ├── README.md
-│   ├── agents/
-│   ├── checklists/
-│   ├── getting-started.md
-│   ├── module-build-guide.md
-│   ├── runbooks/
-│   ├── rules/
-│   ├── outputs.md
-│   └── templates/
+│   ├── 01-guide/             # 처음 읽는 안내서
+│   ├── 02-standards/         # Terraform 코드/문서 작성 기준
+│   ├── 03-operations/        # 체크리스트, 런북, 산출물 보관 기준
+│   ├── 04-templates/         # 문서 템플릿
+│   └── 99-agents/            # AI 작업 보조 지침
 └── ops/                      # 실제 Terraform/Terragrunt 실행 자산
     ├── terragrunt.hcl        # ops 루트: remote_state + provider 자동 생성
     ├── envs/                 # 환경별 기준값 참조 문서 (dev.hcl, prod.hcl)
@@ -114,15 +105,13 @@ terraform-practice/
 
 | 경로 | 역할 |
 |------|------|
-| `docs/` | AI 에이전트 지침, 작성 규칙, 체크리스트, 런북, 템플릿 |
-| `docs/getting-started.md` | 저장소 읽는 순서 |
-| `docs/module-build-guide.md` | Terragrunt/모듈 구조 이해 |
-| `docs/checklists/` | apply 전 점검과 모듈 리뷰 기준 |
-| `docs/runbooks/` | drift detection, state import 운영 절차 |
-| `docs/rules/` | Terraform 코드/문서 작성 규칙 |
-| `docs/agents/` | AI 작업 지침 |
-| `docs/templates/` | README, 런북, 장애 보고서 템플릿 |
-| `docs/outputs.md` | plan, graph, 점검 결과 보관 규칙 |
+| `docs/` | 가이드, 표준, 운영 절차, 템플릿, AI 작업 보조 지침 |
+| `docs/01-guide/getting-started.md` | 저장소 읽는 순서 |
+| `docs/01-guide/module-build-guide.md` | Terragrunt/모듈 구조 이해 |
+| `docs/02-standards/` | Terraform 코드/문서 작성 규칙 |
+| `docs/03-operations/` | apply 전 점검, 모듈 리뷰, drift/import 런북, 산출물 보관 규칙 |
+| `docs/04-templates/` | README, 런북, 장애 보고서 템플릿 |
+| `docs/99-agents/` | AI 작업 보조 지침 |
 | `ops/bootstrap/` | Terraform backend용 S3/DynamoDB 최초 생성 |
 | `ops/live/nonprod/ap-northeast-2/dev/` | nonprod 계정의 dev 환경 Terragrunt live configuration |
 | `ops/live/prod/ap-northeast-2/prod/` | prod 계정의 prod 환경 Terragrunt live configuration |

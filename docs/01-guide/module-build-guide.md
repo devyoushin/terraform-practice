@@ -17,8 +17,8 @@
 |------|-------|
 | 전체 구조를 처음 본다 | `docs/README.md` |
 | 새 모듈을 만들거나 구조를 바꾼다 | 이 문서 |
-| 적용 전 안전성을 확인한다 | `docs/checklists/pre-apply.md` |
-| drift 나 state 문제를 본다 | `docs/runbooks/*.md` |
+| 적용 전 안전성을 확인한다 | `docs/03-operations/pre-apply-checklist.md` |
+| drift 나 state 문제를 본다 | `docs/03-operations/*-runbook.md` |
 | 실제 apply를 한다 | `ops/README.md` |
 
 ---
@@ -32,7 +32,7 @@
 | `ops/live/prod/ap-northeast-2/prod/` | prod 환경 Terragrunt 호출부 |
 | `ops/envs/` | 공통 변수 참조와 환경별 기준값 |
 | `ops/modules/` | 재사용 모듈과 모듈별 README |
-| `docs/` | 읽는 순서, 규칙, 체크리스트, 런북, 템플릿 |
+| `docs/` | 가이드, 표준, 운영 절차, 템플릿, AI 작업 지침 |
 
 ---
 
@@ -68,7 +68,7 @@
 - `terraform fmt` 또는 `terragrunt hclfmt`
 - `terraform validate` 또는 `terragrunt validate`
 - `plan` 결과 검토
-- `docs/checklists/pre-apply.md` 확인
+- `docs/03-operations/pre-apply-checklist.md` 확인
 
 ---
 
@@ -97,7 +97,7 @@
 
 1. 실제 리소스 ID를 확인한다.
 2. 코드와 리소스 이름을 맞춘다.
-3. `docs/runbooks/state-import.md` 절차를 따른다.
+3. `docs/03-operations/state-import-runbook.md` 절차를 따른다.
 
 ---
 
@@ -115,10 +115,9 @@
 ## 읽는 순서
 
 1. `docs/README.md`
-2. `docs/getting-started.md`
-3. `docs/module-build-guide.md`
-4. `docs/rules/README.md`
-5. `docs/checklists/README.md`
-6. `docs/runbooks/README.md`
+2. `docs/01-guide/getting-started.md`
+3. `docs/01-guide/module-build-guide.md`
+4. `docs/02-standards/terraform-conventions.md`
+5. `docs/03-operations/pre-apply-checklist.md`
+6. `docs/03-operations/drift-detection-runbook.md`
 7. `ops/README.md`
-

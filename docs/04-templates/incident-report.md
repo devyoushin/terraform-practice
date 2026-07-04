@@ -55,11 +55,11 @@ aws cloudtrail lookup-events ...
 
 | 대책 | 관련 파일 | 완료 기한 |
 |------|----------|---------|
-| {대책} | {rules/ 또는 모듈 파일} | {날짜} |
+| {대책} | {docs/02-standards/ 또는 모듈 파일} | {날짜} |
 
 ---
 
 ## 6. 아키텍처 개선사항
 
 - {개선 1}: `{관련 모듈}` 수정 필요
-- {개선 2}: `docs/rules/terraform-conventions.md` 업데이트 필요
+- {개선 2}: `docs/02-standards/terraform-conventions.md` 업데이트 필요

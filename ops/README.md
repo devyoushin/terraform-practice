@@ -103,9 +103,9 @@ terragrunt run-all plan --terragrunt-working-dir ops/live/nonprod/ap-northeast-2
 
 ## 운영 기준
 
-- `prod` apply 전에는 `../docs/checklists/pre-apply.md`를 먼저 확인합니다.
-- 새 모듈이나 큰 변경은 `../docs/checklists/module-review.md` 기준으로 리뷰합니다.
-- 예상하지 못한 변경이 보이면 `../docs/runbooks/drift-detection.md` 흐름으로 원인을 분리합니다.
-- 기존 리소스를 Terraform 관리 대상으로 편입할 때는 `../docs/runbooks/state-import.md`를 사용합니다.
+- `prod` apply 전에는 `../docs/03-operations/pre-apply-checklist.md`를 먼저 확인합니다.
+- 새 모듈이나 큰 변경은 `../docs/03-operations/module-review-checklist.md` 기준으로 리뷰합니다.
+- 예상하지 못한 변경이 보이면 `../docs/03-operations/drift-detection-runbook.md` 흐름으로 원인을 분리합니다.
+- 기존 리소스를 Terraform 관리 대상으로 편입할 때는 `../docs/03-operations/state-import-runbook.md`를 사용합니다.
 - 장기 보관할 plan, dependency graph, 감사 결과는 `outputs/` 아래에 날짜별로 저장합니다.
 - 민감정보는 코드, `outputs/`, plan 텍스트에 남기지 않습니다.
