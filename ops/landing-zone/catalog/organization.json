@@ -1,0 +1,98 @@
+{
+  "email_domain": "example.com",
+  "root_ous": {
+    "security": {
+      "name": "Security",
+      "tags": {
+        "Purpose": "security-governance"
+      }
+    },
+    "infrastructure": {
+      "name": "Infrastructure",
+      "tags": {
+        "Purpose": "network-and-platform"
+      }
+    },
+    "shared-services": {
+      "name": "SharedServices",
+      "tags": {
+        "Purpose": "shared-tools"
+      }
+    },
+    "workloads": {
+      "name": "Workloads",
+      "tags": {
+        "Purpose": "application-workloads"
+      }
+    },
+    "sandbox": {
+      "name": "Sandbox",
+      "tags": {
+        "Purpose": "experimentation"
+      }
+    },
+    "suspended": {
+      "name": "Suspended",
+      "tags": {
+        "Purpose": "closed-or-quarantined"
+      }
+    }
+  },
+  "child_ous": {
+    "workloads-dev": {
+      "name": "Dev",
+      "parent_ou_key": "workloads",
+      "tags": {
+        "Environment": "dev"
+      }
+    },
+    "workloads-stg": {
+      "name": "Stg",
+      "parent_ou_key": "workloads",
+      "tags": {
+        "Environment": "stg"
+      }
+    },
+    "workloads-prd": {
+      "name": "Prd",
+      "parent_ou_key": "workloads",
+      "tags": {
+        "Environment": "prd"
+      }
+    }
+  },
+  "foundation_accounts": {
+    "audit": {
+      "name": "lz-audit",
+      "email": "aws-audit@example.com",
+      "ou_key": "security",
+      "tags": {
+        "AccountType": "audit"
+      }
+    },
+    "log-archive": {
+      "name": "lz-log-archive",
+      "email": "aws-log-archive@example.com",
+      "ou_key": "security",
+      "tags": {
+        "AccountType": "log-archive"
+      }
+    },
+    "network": {
+      "name": "lz-network",
+      "email": "aws-network@example.com",
+      "ou_key": "infrastructure",
+      "tags": {
+        "AccountType": "network"
+      }
+    },
+    "shared-services": {
+      "name": "lz-shared-services",
+      "email": "aws-shared-services@example.com",
+      "ou_key": "shared-services",
+      "tags": {
+        "AccountType": "shared-services"
+      }
+    }
+  }
+}

@@ -1,0 +1,306 @@
+base_cidr: 10.100.0.0/16
+environments:
+  - dev
+  - stg
+  - prd
+services:
+  - key: identity
+    name: Identity Platform
+    domain: platform
+    index: 0
+    owner: platform-identity
+    criticality: high
+  - key: billing
+    name: Billing
+    domain: finance
+    index: 1
+    owner: finance-platform
+    criticality: high
+  - key: payment
+    name: Payment
+    domain: finance
+    index: 2
+    owner: payment-platform
+    criticality: critical
+  - key: order
+    name: Order
+    domain: commerce
+    index: 3
+    owner: commerce-platform
+    criticality: critical
+  - key: catalog
+    name: Product Catalog
+    domain: commerce
+    index: 4
+    owner: commerce-platform
+    criticality: high
+  - key: cart
+    name: Cart
+    domain: commerce
+    index: 5
+    owner: commerce-platform
+    criticality: medium
+  - key: checkout
+    name: Checkout
+    domain: commerce
+    index: 6
+    owner: commerce-platform
+    criticality: critical
+  - key: promotion
+    name: Promotion
+    domain: commerce
+    index: 7
+    owner: growth-platform
+    criticality: medium
+  - key: pricing
+    name: Pricing
+    domain: commerce
+    index: 8
+    owner: commerce-platform
+    criticality: high
+  - key: inventory
+    name: Inventory
+    domain: fulfillment
+    index: 9
+    owner: fulfillment-platform
+    criticality: high
+  - key: warehouse
+    name: Warehouse
+    domain: fulfillment
+    index: 10
+    owner: fulfillment-platform
+    criticality: high
+  - key: shipping
+    name: Shipping
+    domain: fulfillment
+    index: 11
+    owner: fulfillment-platform
+    criticality: high
+  - key: delivery
+    name: Delivery
+    domain: fulfillment
+    index: 12
+    owner: fulfillment-platform
+    criticality: medium
+  - key: returns
+    name: Returns
+    domain: fulfillment
+    index: 13
+    owner: fulfillment-platform
+    criticality: medium
+  - key: customer
+    name: Customer
+    domain: customer
+    index: 14
+    owner: customer-platform
+    criticality: high
+  - key: crm
+    name: CRM
+    domain: customer
+    index: 15
+    owner: customer-platform
+    criticality: medium
+  - key: notification
+    name: Notification
+    domain: customer
+    index: 16
+    owner: customer-platform
+    criticality: high
+  - key: messaging
+    name: Messaging
+    domain: customer
+    index: 17
+    owner: customer-platform
+    criticality: medium
+  - key: search
+    name: Search
+    domain: experience
+    index: 18
+    owner: experience-platform
+    criticality: high
+  - key: recommendation
+    name: Recommendation
+    domain: experience
+    index: 19
+    owner: experience-platform
+    criticality: medium
+  - key: review
+    name: Review
+    domain: experience
+    index: 20
+    owner: experience-platform
+    criticality: medium
+  - key: content
+    name: Content
+    domain: experience
+    index: 21
+    owner: experience-platform
+    criticality: medium
+  - key: cms
+    name: CMS
+    domain: experience
+    index: 22
+    owner: experience-platform
+    criticality: low
+  - key: analytics
+    name: Analytics
+    domain: data
+    index: 23
+    owner: data-platform
+    criticality: high
+  - key: datalake
+    name: Data Lake
+    domain: data
+    index: 24
+    owner: data-platform
+    criticality: high
+  - key: warehouse-data
+    name: Data Warehouse
+    domain: data
+    index: 25
+    owner: data-platform
+    criticality: high
+  - key: ml-platform
+    name: ML Platform
+    domain: data
+    index: 26
+    owner: data-platform
+    criticality: medium
+  - key: feature-store
+    name: Feature Store
+    domain: data
+    index: 27
+    owner: data-platform
+    criticality: medium
+  - key: fraud
+    name: Fraud Detection
+    domain: risk
+    index: 28
+    owner: risk-platform
+    criticality: critical
+  - key: compliance
+    name: Compliance
+    domain: risk
+    index: 29
+    owner: risk-platform
+    criticality: high
+  - key: audit-trail
+    name: Audit Trail
+    domain: risk
+    index: 30
+    owner: risk-platform
+    criticality: high
+  - key: iam-broker
+    name: IAM Broker
+    domain: security
+    index: 31
+    owner: security-platform
+    criticality: critical
+  - key: secrets-broker
+    name: Secrets Broker
+    domain: security
+    index: 32
+    owner: security-platform
+    criticality: high
+  - key: security-monitoring
+    name: Security Monitoring
+    domain: security
+    index: 33
+    owner: security-platform
+    criticality: critical
+  - key: observability
+    name: Observability
+    domain: operations
+    index: 34
+    owner: operations-platform
+    criticality: high
+  - key: incident
+    name: Incident Management
+    domain: operations
+    index: 35
+    owner: operations-platform
+    criticality: high
+  - key: cicd
+    name: CI CD
+    domain: platform
+    index: 36
+    owner: platform-engineering
+    criticality: high
+  - key: artifact
+    name: Artifact Registry
+    domain: platform
+    index: 37
+    owner: platform-engineering
+    criticality: high
+  - key: container-platform
+    name: Container Platform
+    domain: platform
+    index: 38
+    owner: platform-engineering
+    criticality: critical
+  - key: service-mesh
+    name: Service Mesh
+    domain: platform
+    index: 39
+    owner: platform-engineering
+    criticality: high
+  - key: api-gateway
+    name: API Gateway
+    domain: platform
+    index: 40
+    owner: platform-engineering
+    criticality: critical
+  - key: edge
+    name: Edge
+    domain: platform
+    index: 41
+    owner: platform-engineering
+    criticality: high
+  - key: dns
+    name: DNS
+    domain: network
+    index: 42
+    owner: network-platform
+    criticality: critical
+  - key: ingress
+    name: Ingress
+    domain: network
+    index: 43
+    owner: network-platform
+    criticality: critical
+  - key: egress
+    name: Egress
+    domain: network
+    index: 44
+    owner: network-platform
+    criticality: critical
+  - key: inspection
+    name: Network Inspection
+    domain: network
+    index: 45
+    owner: network-platform
+    criticality: critical
+  - key: partner
+    name: Partner Integration
+    domain: integration
+    index: 46
+    owner: integration-platform
+    criticality: medium
+  - key: webhook
+    name: Webhook
+    domain: integration
+    index: 47
+    owner: integration-platform
+    criticality: medium
+  - key: batch
+    name: Batch Processing
+    domain: integration
+    index: 48
+    owner: integration-platform
+    criticality: high
+  - key: scheduler
+    name: Scheduler
+    domain: integration
+    index: 49
+    owner: integration-platform
+    criticality: medium
